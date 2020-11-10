@@ -22,7 +22,7 @@ public class UserDAO implements DAO<User> {
 
 		StringBuffer sql = new StringBuffer();
 		sql.append("INSERT INTO ");
-		sql.append("public.\"user\" ");
+		sql.append("public.usuario ");
 		sql.append("  (name, lastname, email, privilege, birthdate, cpf, password) ");
 		sql.append("VALUES ");
 		sql.append("  ( ?, ?, ?, ?, ?, ?, ?) ");
@@ -84,7 +84,7 @@ public class UserDAO implements DAO<User> {
 		Connection conn = DAO.getConnection();
 
 		StringBuffer sql = new StringBuffer();
-		sql.append("UPDATE public.\"user\" SET ");
+		sql.append("UPDATE usuario SET ");
 		sql.append("  name = ?, ");
 		sql.append("  lastname = ?, ");
 		sql.append("  email = ?, ");
@@ -115,7 +115,7 @@ public class UserDAO implements DAO<User> {
 
 		} catch (SQLException e) {
 
-			System.out.println("Erro ao realizar um comando sql de insert.");
+			System.out.println("Erro ao realizar um comando SQL - UPDATE.");
 			e.printStackTrace();
 
 			try {
@@ -154,7 +154,7 @@ public class UserDAO implements DAO<User> {
 		Connection conn = DAO.getConnection();
 
 		StringBuffer sql = new StringBuffer();
-		sql.append("DELETE FROM public.\"user\" WHERE id = ?");
+		sql.append("DELETE FROM usuario WHERE id = ?");
 
 		PreparedStatement stat = null;
 
@@ -167,7 +167,7 @@ public class UserDAO implements DAO<User> {
 
 		} catch (SQLException e) {
 
-			System.out.println("Erro ao realizar um comando sql de insert.");
+			System.out.println("Erro ao realizar um comando SQL - DELETE.");
 			e.printStackTrace();
 
 			try {
@@ -204,7 +204,7 @@ public class UserDAO implements DAO<User> {
 	public List<User> getAll() throws Exception {
 		Exception exception = null;
 		Connection conn = DAO.getConnection();
-		List<User> listaUsuario = new ArrayList<>();
+		List<User> userList = new ArrayList<>();
 
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT ");
@@ -217,7 +217,7 @@ public class UserDAO implements DAO<User> {
 		sql.append("  u.cpf, ");
 		sql.append("  u.password ");
 		sql.append("FROM  ");
-		sql.append("  public.\"user\" u ");
+		sql.append("  usuario u ");
 		sql.append("ORDER BY u.nome ");
 
 		PreparedStatement stat = null;
@@ -239,7 +239,7 @@ public class UserDAO implements DAO<User> {
 				user.setCpf(rs.getString("cpf"));
 				user.setPassword(rs.getString("pasword"));
 
-				listaUsuario.add(user);
+				userList.add(user);
 			}
 
 		} catch (SQLException e) {
@@ -267,7 +267,7 @@ public class UserDAO implements DAO<User> {
 		if (exception != null)
 			throw exception;
 
-		return listaUsuario;
+		return userList;
 	}
 
 	@Override
@@ -288,7 +288,7 @@ public class UserDAO implements DAO<User> {
 		sql.append("  u.cpf, ");
 		sql.append("  u.password ");
 		sql.append("FROM  ");
-		sql.append("  public.\"user\" u ");
+		sql.append("  usuario u ");
 		sql.append("WHERE u.id = ? ");
 
 		PreparedStatement stat = null;
@@ -340,7 +340,7 @@ public class UserDAO implements DAO<User> {
 		return user;
 	}
 
-	public static User validateLogin(User obj) throws Exception {
+	public static User validateLogin(User obj) {
 		Exception exception = null;
 		Connection conn = DAO.getConnection();
 
@@ -355,7 +355,7 @@ public class UserDAO implements DAO<User> {
 		sql.append("  u.cpf, ");
 		sql.append("  u.password ");
 		sql.append("FROM  ");
-		sql.append("  public.\"user\" u ");
+		sql.append("  usuario u ");
 		sql.append("WHERE u.email = ? ");
 		
 		PreparedStatement stat = null;

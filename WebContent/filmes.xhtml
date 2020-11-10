@@ -13,31 +13,35 @@
 <h:body style="background: #f0f0f5">
 	<div class="container-fluid d-flex align-items-center justify-content-center" style="height: 100vh; flex-direction: column">
 		<h:messages id="messages" styleClass="warns" infoClass="alert alert-success" errorClass="alert alert-danger"/>
-		<h:form class="form-signin">
-			<div class="text-center mb-4">Informe seus dados de acesso</div>
+		<h:form class="container">
+			<h1 class="text-center mb-4">Cadastre um novo filme</h1>
+		  	<div class="form-row">
+			    <div class="form-group col-md-7">
+			      <label for="title">Título</label>
+			      <h:inputText class="form-control" id="title" value="#{movieController.entity.title}"/>
+			    </div>
+			    <div class="form-group col-md-3">
+			      <label for="release">Data de Lançamento</label>
+			      <h:inputText pt:type="date" class="form-control" id="release" value="#{movieController.entity.release}">
+					<f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+			      </h:inputText>
+			    </div>
+			    <div class="form-group col-md-2">
+			      <label for="parental">Classificação Indicativa</label>
+			      <h:selectOneMenu class="form-control" id="parental" value="#{movieController.entity.rate}">
+			      	<f:selectItems value="#{movieController.parentals}" var="p" itemLabel="#{p.label}" />
+			      </h:selectOneMenu>
+			    </div>
+		  	</div>
 			<div class="form-group">
-				<label for="email">Email</label>
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<span class="input-group-text">
-							<i class="fas fa-at"></i>
-						</span>
-					</div>
-					<input id="email" type="email" jsf:value="#{userController.entity.email}" class="form-control"/>
-				</div>
+			    <label for="sinopse">Sinopse</label>
+			    <textarea class="form-control" id="sinopse" rows="3" jsf:value="#{movieController.entity.sinopse}"></textarea>
 			</div>
 			<div class="form-group">
-				<label for="password">Senha</label>
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<span class="input-group-text">
-							<i class="fas fa-key"></i>
-						</span>
-					</div>
-					<input id="password" type="password" jsf:value="#{userController.entity.password}" class="form-control"/>
-				</div>
+			    <label for="imageURL">URL da capa</label>
+			    <h:inputText class="form-control" id="imageURL" rows="3" value="#{movieController.entity.image}"/>
 			</div>
-			<h:commandButton class="btn btn-primary" value="Entrar" actionListener="#{userController.login}">
+			<h:commandButton class="btn btn-primary" value="Cadastrar Filme" actionListener="#{movieController.insert()}">
 				<f:ajax execute="@form" render="@form messages"/>
 			</h:commandButton>
 		</h:form>

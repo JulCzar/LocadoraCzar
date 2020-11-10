@@ -7,6 +7,7 @@ import javax.inject.Named;
 
 import br.czar.dao.UserDAO;
 import br.czar.model.User;
+import br.czar.util.Utils;
 
 @Named
 @ViewScoped
@@ -19,15 +20,12 @@ public class UserController extends Controller<User> implements Serializable {
 	}
 	
 	public void login() {
-		try {
-			User u = UserDAO.validateLogin(entity);
-			
-			if (u != null) System.out.println("Login Bem Sucedido");
-			else System.out.println("deu nulo");
-		} catch (Exception e) {
-			System.out.println("Deu Merda");
-			e.printStackTrace();
-		}
+		User u = UserDAO.validateLogin(entity);
+		
+		if (u != null)
+			Utils.redirect("/LocadoraCzar/faces/filmes.xhtml?faces-redirect=true");
+		else
+			Utils.addErrorMessage("Usuario ou Senha Incorreto");
 	}
 
 	@Override
