@@ -7,10 +7,9 @@ import br.czar.util.Utils;
 import br.czar.dao.DAO;
 
 public abstract class Controller<T> {
-
 	protected T entity;
 	protected DAO<T> dao = null;
-	private List<T> entityList;
+	private List<T> entityList = null;
 	
 	public Controller(DAO<T> dao) {
 		this.dao = dao;
@@ -31,6 +30,7 @@ public abstract class Controller<T> {
 		try {
 			dao.update(getEntity());
 			Utils.addInfoMessage("Alteração realizada com sucesso.");
+			setEntityList(null);
 			clear();
 		} catch (Exception e) {
 			Utils.addErrorMessage("Não é possivel fazer uma alteração.");
@@ -72,6 +72,10 @@ public abstract class Controller<T> {
 			}
 		}	
 		return entityList;
+	}
+
+	public void setEntityList(List<T> entityList) {
+		this.entityList = entityList;
 	}
 	
 	public void clear() {

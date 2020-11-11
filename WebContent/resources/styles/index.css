@@ -1,3 +1,13 @@
 body {
-	background: #f0f0f5 !important;
+	overflow-x: hidden;
+}
+
+.clear-button-style input[type="submit"] {
+	background: none;
+	border: none;
+}
+
+.warns {
+	list-style-type: none;
+	padding-inline-start: 0 !important
 }

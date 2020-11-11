@@ -19,6 +19,14 @@ public class MovieController extends Controller<Movie> implements Serializable {
 		super(new MovieDAO());
 	}
 	
+	public void getMovieDetails(Movie m) {		
+		try {
+			setEntity(dao.getOne(m));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void registerMovie() {
 		try {
 			dao.insert(entity);

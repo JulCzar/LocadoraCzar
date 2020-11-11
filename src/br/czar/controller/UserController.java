@@ -23,7 +23,7 @@ public class UserController extends Controller<User> implements Serializable {
 		User u = UserDAO.validateLogin(entity);
 		
 		if (u != null)
-			Utils.redirect("/LocadoraCzar/faces/filmes.xhtml?faces-redirect=true");
+			Utils.redirect("/LocadoraCzar/faces/filmes.xhtml");
 		else
 			Utils.addErrorMessage("Usuario ou Senha Incorreto");
 	}

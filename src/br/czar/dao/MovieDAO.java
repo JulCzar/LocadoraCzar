@@ -87,7 +87,7 @@ public class MovieDAO implements DAO<Movie> {
 		sql.append("  sinopse = ?, ");
 		sql.append("  release = ?, ");
 		sql.append("  rate = ?, ");
-		sql.append("  image = ?, ");
+		sql.append("  image = ? ");
 		sql.append("WHERE ");
 		sql.append("  id = ? ");
 
@@ -207,10 +207,10 @@ public class MovieDAO implements DAO<Movie> {
 		sql.append("  f.sinopse, ");
 		sql.append("  f.release, ");
 		sql.append("  f.rate, ");
-		sql.append("  f.image, ");
+		sql.append("  f.image ");
 		sql.append("FROM  ");
 		sql.append("  filmes f ");
-		sql.append("ORDER BY f.nome ");
+		sql.append("ORDER BY f.title ");
 
 		PreparedStatement stat = null;
 		try {
@@ -274,14 +274,13 @@ public class MovieDAO implements DAO<Movie> {
 		sql.append("  f.sinopse, ");
 		sql.append("  f.release, ");
 		sql.append("  f.rate, ");
-		sql.append("  f.image, ");
+		sql.append("  f.image ");
 		sql.append("FROM  ");
 		sql.append("  filmes f ");
 		sql.append("WHERE f.id = ? ");
 
 		PreparedStatement stat = null;
 		try {
-
 			stat = conn.prepareStatement(sql.toString());
 			stat.setInt(1, obj.getId());
 
