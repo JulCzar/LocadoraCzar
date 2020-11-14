@@ -18,15 +18,6 @@ public class UserController extends Controller<User> implements Serializable {
 	public UserController() {
 		super(new UserDAO());
 	}
-	
-	public void login() {
-		User u = UserDAO.validateLogin(entity);
-		
-		if (u != null)
-			Utils.redirect("/LocadoraCzar/faces/filmes.xhtml");
-		else
-			Utils.addErrorMessage("Usuario ou Senha Incorreto");
-	}
 
 	@Override
 	public User getEntity() {

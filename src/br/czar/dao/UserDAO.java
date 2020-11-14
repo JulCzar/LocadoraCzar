@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import br.czar.model.Privilege;
@@ -341,7 +342,9 @@ public class UserDAO implements DAO<User> {
 	}
 
 	public static User validateLogin(User obj) {
-		Exception exception = null;
+		String email = obj.getEmail();
+		String password = obj.getPassword();
+		String passwordB64 = Utils.base64Parse(password);
 		Connection conn = DAO.getConnection();
 
 		StringBuffer sql = new StringBuffer();
@@ -357,11 +360,13 @@ public class UserDAO implements DAO<User> {
 		sql.append("FROM  ");
 		sql.append("  usuario u ");
 		sql.append("WHERE u.email = ? ");
+		sql.append("AND u.password = ? ");
 		
 		PreparedStatement stat = null;
 		try {
 			stat = conn.prepareStatement(sql.toString());
-			stat.setString(1, obj.getEmail());
+			stat.setString(1, email);
+			stat.setString(2, Utils.hashParse(email + password + passwordB64));
 
 			ResultSet rs = stat.executeQuery();
 			
@@ -376,15 +381,85 @@ public class UserDAO implements DAO<User> {
 				user.setPrivilege(Privilege.valueOf(rs.getInt("privilege")));
 				user.setBirthdate(birthdate == null ? null : birthdate.toLocalDate());
 				user.setCpf(rs.getString("cpf"));
-				user.setPasswordBase64(rs.getString("password"));
-
-				if (user.getPassword().equals(obj.getPassword()))
-					return user;
+				
+				return user;
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		return null;
+	}
+
+	public List<User> search(String q) throws Exception {
+		Exception exception = null;
+		Connection conn = DAO.getConnection();
+		List<User> userList = new ArrayList<>();
+
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT ");
+		sql.append("  u.id, ");
+		sql.append("  u.name, ");
+		sql.append("  u.lastname, ");
+		sql.append("  u.email, ");
+		sql.append("  u.privilege, ");
+		sql.append("  u.birthdate, ");
+		sql.append("  u.cpf, ");
+		sql.append("  u.password ");
+		sql.append("FROM  ");
+		sql.append("  usuario u ");
+		sql.append("WHERE  ");
+		sql.append("  u.nome LIKE ? ");
+		sql.append("ORDER BY u.nome ");
+
+		PreparedStatement stat = null;
+		try {
+
+			stat = conn.prepareStatement(sql.toString());
+			stat.setString(1, "%" + q + "%");
+
+			ResultSet rs = stat.executeQuery();
+
+			while (rs.next()) {
+				User user = new User();
+				Date birthdate = rs.getDate("birthdate");
+				user.setId(rs.getInt("id"));
+				user.setName(rs.getString("name"));
+				user.setLastname(rs.getString("lastname"));
+				user.setEmail(rs.getString("email"));
+				user.setPrivilege(Privilege.valueOf(rs.getInt("privilege")));
+				user.setBirthdate(birthdate == null ? null : birthdate.toLocalDate());
+				user.setCpf(rs.getString("cpf"));
+				user.setPassword(rs.getString("pasword"));
+
+				userList.add(user);
+			}
+
+		} catch (SQLException e) {
+			Utils.addErrorMessage("Não foi possivel buscar os dados do usuario.");
+			e.printStackTrace();
+			exception = new Exception("Erro ao executar um sql em UsuarioDAO.");
+		} finally {
+			try {
+				if (!stat.isClosed())
+					stat.close();
+			} catch (SQLException e) {
+				System.out.println("Erro ao fechar o Statement");
+				e.printStackTrace();
+			}
+
+			try {
+				if (!conn.isClosed())
+					conn.close();
+			} catch (SQLException e) {
+				System.out.println("Erro a o fechar a conexao com o banco.");
+				e.printStackTrace();
+			}
+		}
+
+		if (exception != null)
+			throw exception;
+
+		return userList;
 	}
 }

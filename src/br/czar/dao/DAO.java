@@ -5,12 +5,15 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
+import br.czar.model.Movie;
+
 public interface DAO<T> {
 	public void insert(T obj) throws Exception;
 	public void update(T obj) throws Exception;
 	public void delete(T obj) throws Exception;
 	public List<T> getAll() throws Exception;
 	public T getOne(T obj) throws Exception;
+	public List<T> search(String q) throws Exception;
 	
 	public static Connection getConnection() {
 		Connection conn = null;

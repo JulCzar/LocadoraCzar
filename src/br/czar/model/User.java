@@ -59,11 +59,9 @@ public class User {
 		return this.password;
 	}
 	public void setPassword(String password) {
-		this.password = Base64.getEncoder().encodeToString(password.getBytes());
-	}
-	public void setPasswordBase64(String password) {
 		this.password = password;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -86,5 +84,10 @@ public class User {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+	@Override
+	public String toString() {
+		return "User {\n  id: " + id + ",\n  name: " + name + ",\n  lastname: " + lastname + ",\n  email: " + email + ",\n  privilege: "
+				+ privilege + ",\n  birthdate: " + birthdate + ",\n  cpf: " + cpf + ",\n  password: " + password + "\n}";
 	}
 }

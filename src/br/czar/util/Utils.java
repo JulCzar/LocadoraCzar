@@ -1,6 +1,7 @@
 package br.czar.util;
 
 import java.io.IOException;
+import java.util.Base64;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -10,6 +11,8 @@ import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 import com.sun.faces.component.visit.FullVisitContext;
 
@@ -66,4 +69,12 @@ public class Utils {
 
 	    return found[0];
 	}	
+
+	public static String hashParse(String value) {
+		return DigestUtils.sha256Hex(value);
+	}
+	
+	public static String base64Parse(String value) {
+		return Base64.getEncoder().encodeToString(value.getBytes());
+	}
 }

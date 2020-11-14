@@ -8,12 +8,15 @@ import javax.inject.Named;
 import br.czar.dao.MovieDAO;
 import br.czar.model.Movie;
 import br.czar.model.Parental;
+import br.czar.model.User;
+import br.czar.util.SessionStorage;
 import br.czar.util.Utils;
 
 @Named
 @ViewScoped
 public class MovieController extends Controller<Movie> implements Serializable {
 	private static final long serialVersionUID = 2480025844694481727L;
+	private String search;
 	
 	public MovieController() {
 		super(new MovieDAO());
@@ -23,6 +26,16 @@ public class MovieController extends Controller<Movie> implements Serializable {
 		try {
 			setEntity(dao.getOne(m));
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void searchByTitle() {
+		setEntityList(null);
+		try {
+			setEntityList(dao.search(getSearch()));
+		} catch (Exception e) {
+			Utils.addErrorMessage("Não foi possível buscar o filme no momento, tente mais tarde!");
 			e.printStackTrace();
 		}
 	}
@@ -50,4 +63,13 @@ public class MovieController extends Controller<Movie> implements Serializable {
 		
 		return entity;
 	}
+	
+	public String getSearch() {
+		return search;
+	}
+	
+	public void setSearch(String search) {
+		this.search = search;
+	}
+	
 }

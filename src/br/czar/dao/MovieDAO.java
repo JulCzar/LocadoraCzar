@@ -324,5 +324,72 @@ public class MovieDAO implements DAO<Movie> {
 
 		return movie;
 	}
+	
+	public List<Movie> search(String query) throws Exception {
+		Exception exception = null;
+		Connection conn = DAO.getConnection();
+		List<Movie> movieList = new ArrayList<>();
 
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT ");
+		sql.append("  f.id, ");
+		sql.append("  f.title, ");
+		sql.append("  f.sinopse, ");
+		sql.append("  f.release, ");
+		sql.append("  f.rate, ");
+		sql.append("  f.image ");
+		sql.append("FROM  ");
+		sql.append("  filmes f ");
+		sql.append("Where  ");
+		sql.append("  f.title LIKE ?");
+		sql.append("ORDER BY f.title ");
+
+		PreparedStatement stat = null;
+		try {
+
+			stat = conn.prepareStatement(sql.toString());
+			stat.setString(1, "%" + query + "%");
+
+			ResultSet rs = stat.executeQuery();
+
+			while (rs.next()) {
+				Movie movie = new Movie();
+				Date release = rs.getDate("release");
+				movie.setId(rs.getInt("id"));
+				movie.setTitle(rs.getString("title"));
+				movie.setSinopse(rs.getString("sinopse"));
+				movie.setRelease(release == null ? null : release.toLocalDate());
+				movie.setRate(Parental.valueOf(rs.getInt("rate")));
+				movie.setImage(rs.getString("image"));
+
+				movieList.add(movie);
+			}
+
+		} catch (SQLException e) {
+			Utils.addErrorMessage("Não foi possivel buscar os dados do filme.");
+			e.printStackTrace();
+			exception = new Exception("Erro ao executar um SQL em MovieDAO.");
+		} finally {
+			try {
+				if (!stat.isClosed())
+					stat.close();
+			} catch (SQLException e) {
+				System.out.println("Erro ao fechar o Statement");
+				e.printStackTrace();
+			}
+
+			try {
+				if (!conn.isClosed())
+					conn.close();
+			} catch (SQLException e) {
+				System.out.println("Erro a o fechar a conexao com o banco.");
+				e.printStackTrace();
+			}
+		}
+
+		if (exception != null)
+			throw exception;
+
+		return movieList;
+	}
 }
