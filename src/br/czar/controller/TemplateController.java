@@ -21,7 +21,6 @@ public class TemplateController implements Serializable {
 	public User getUser() {
 		Object user = sessionStorage.getItem("userData");
 		
-		System.out.println(user);
 		if (user == null)
 			return null;
 		

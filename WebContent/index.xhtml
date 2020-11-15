@@ -20,38 +20,33 @@ xmlns:ui="http://java.sun.com/jsf/facelets">
 	<ui:include src="/resources/components/modal.xhtml"/>
 	<ui:include src="/resources/components/navbar.xhtml"/>
 	
-	<div class="container-fluid align-items-center justify-content-center" style="height: 100vh; flex-direction: column">
+	<div class="container-fluid align-items-center justify-content-center p-4" style="height: 100vh; flex-direction: column">
 		<h:messages id="messages" styleClass="warns mt-3" infoClass="alert alert-success" errorClass="alert alert-danger"/>
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" placeholder="Digite o nome do filme" aria-label="Digite o nome do filme" aria-describedby="button-addon2"/>
+		  <div class="input-group-append">
+		    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Buscar</button>
+		  </div>
+		</div>
 		<h:form>
-			<h:dataTable id="listagemFilmes" class="mt-3 table table-bordered table-hover" value="#{movieController.entityList}" var="mov">
-				<h:column>
-					<f:facet class="col" name="header">Id</f:facet>		
-					<h:outputLabel value="#{mov.id}"/>	
-				</h:column>
-				<h:column pt:class="d-flex justify-content-center">
-					<f:facet class="col" name="header">Image</f:facet>		
-					<img src="#{mov.image}" height="100"/>	
-				</h:column>
-				<h:column>
-					<f:facet class="col" name="header">Título</f:facet>		
-					<h:outputLabel value="#{mov.title}"/>	
-				</h:column>
-				<h:column class="text-center align-middle clear-button-style">
-					<f:facet class="col" name="header">Editar</f:facet>		
-					<h:commandButton
-						pt:class="material-icons-outlined clean-button-style"
-						pt:data-toggle="modal"
-						pt:data-target="#staticBackdrop"
-						value="edit"
-						actionListener="#{movieController.getMovieDetails(mov)}">
-						<f:ajax execute="@this" render="editForm"/>
-					</h:commandButton>	
-				</h:column>
-				<h:column class="text-center align-middle clear-button-style">
-					<f:facet class="col" name="header">Apagar</f:facet>		
-					<h:commandButton pt:class="material-icons-outlined" value="delete" actionListener="#{movieController.delete(mov)}"></h:commandButton>	
-				</h:column>
-			</h:dataTable>
+			<div class="d-flex flex-wrap justify-content-between">
+			<ui:repeat var="mov" value="#{movieController.entityList}">
+				<a class="card mb-3 shadow-sm" style="max-width: 30vmax; cursor:pointer" data-toggle="modal" data-target="#staticBackdrop" jsf:actionListener="#{movieController.getMovieDetails(mov)}">
+				  <div class="row no-gutters">
+				    <div class="col-md-4">
+				      <img src="#{mov.image}" class="card-img" alt="..."/>
+				    </div>
+				    <div class="col-md-8">
+				      <div class="card-body">
+				        <h5 class="card-title">#{mov.title}</h5>
+				        <p class="card-text text-justify">#{mov.sinopse.substring(0, 120)}</p>
+				      </div>
+				    </div>
+					<f:ajax execute="@this" render="editForm"/>
+				  </div>
+				</a>
+			</ui:repeat>
+			</div>
 		</h:form>
 	</div>
 </h:body>
