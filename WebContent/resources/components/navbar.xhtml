@@ -12,7 +12,9 @@
 <h:body>
   <ui:insert name="navbar">
 	<nav class="navbar navbar-expand-lg navbar-dark" style="background: #7952b3">
-	  <a class="navbar-brand" href="#">Navbar</a>
+	  <a class="navbar-brand" href="#">
+	  	<h:graphicImage library="assets" name="logo.png" height="25"/>
+	  </a>
 	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	    <span class="navbar-toggler-icon"></span>
 	  </button>
@@ -22,7 +24,7 @@
 	      <li class="nav-item active">
 	        <a class="nav-link" href="javascript: void(0)">Home <span class="sr-only">(current)</span></a>
 	      </li>
-	      <li class="nav-item">
+	      <li class="nav-item" jsf:rendered="#{templateController.user.privilege.id == 1}">
 	        <a class="nav-link" href="/LocadoraCzar/faces/novo_filme.xhtml">Cadastrar Filme</a>
 	      </li>
 	      <li class="nav-item">

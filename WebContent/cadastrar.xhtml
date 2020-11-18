@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/resources/templates/body.xhtml">
+	<ui:define name="navbar"></ui:define>
+	<ui:define name="content">
+	<div
+		class="container-fluid d-flex align-items-center justify-content-center bg-dark"
+		style="height: 100vh; flex-direction: column">
+		<h:form class="form-signin bg-white p-5 rounded">
+			<h1 class="text-center mb-4">Cadastrar</h1>
+			<h:messages id="messages" styleClass="warns"
+				infoClass="alert alert-success" errorClass="alert alert-danger" />
+			<div class="form-row">
+				<div class="form-group col">
+					<label for="name">Nome</label>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text"> <i class="fas fa-user-alt"></i>
+							</span>
+						</div>
+						<h:inputText id="name" pt:placeholder="Digite seu Nome"
+							value="#{userController.entity.name}" class="form-control" />
+					</div>
+				</div>
+				<div class="form-group col">
+					<label for="lastname">Sobrenome</label>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text"> <i class="fas fa-user-alt"></i>
+							</span>
+						</div>
+						<h:inputText id="lastname" pt:placeholder="Digite seu Sobrenome"
+							value="#{userController.entity.lastname}" class="form-control" />
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="email">Email</label>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text"> <i class="fas fa-envelope"></i>
+						</span>
+					</div>
+					<h:inputText id="email" pt:placeholder="email@example.com"
+						pt:type="email" value="#{userController.entity.email}"
+						class="form-control" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="password">Senha</label>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text"> <i class="fas fa-key"></i>
+						</span>
+					</div>
+					<h:inputText id="password" pt:placeholder="********"
+						pt:type="password" value="#{userController.entity.password}"
+						class="form-control" />
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-7">
+					<label for="cpf">CPF</label>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text"> <i
+								class="fas fa-id-card-alt"></i>
+							</span>
+						</div>
+						<h:inputText pt:onInput="applyCpfMask()" pt:maxLength="14"
+							pt:id="cpf" pt:placeholder="000.000.000-00"
+							value="#{userController.entity.cpf}" class="form-control" />
+					</div>
+				</div>
+				<div class="form-group col-md-5">
+					<label for="birthdate">Data de Nascimento</label>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text"> <i
+								class="fas fa-calendar-alt"></i>
+							</span>
+						</div>
+						<h:inputText pt:type="date" id="birthdate"
+							value="#{userController.entity.birthdate}" class="form-control">
+							<f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+						</h:inputText>
+					</div>
+				</div>
+			</div>
+			<h:commandButton class="btn btn-primary" value="Cadastrar"
+				actionListener="#{userController.insert()}">
+				<f:ajax execute="@form" render="@form messages" />
+			</h:commandButton>
+		</h:form>
+	</div>
+	</ui:define>
+</ui:composition>
+</html>

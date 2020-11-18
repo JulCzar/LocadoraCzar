@@ -2,9 +2,13 @@ package br.czar.model;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotBlank;
+
 public class Movie {
 	private Integer id;
+	@NotBlank(message = "O Filme precisa possuir um título.")
 	private String title;
+	@NotBlank(message = "O Filme precisa possuir sinópse.")
 	private String sinopse;
 	private LocalDate release;
 	private String image;

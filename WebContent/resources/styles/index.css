@@ -1,5 +1,5 @@
 body {
-	overflow-x: hidden;
+	height: 100vh;
 }
 
 .clear-button-style input[type="submit"] {
@@ -9,5 +9,9 @@ body {
 
 .warns {
 	list-style-type: none;
-	padding-inline-start: 0 !important
+	padding-inline-start: 0;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator  {
+	display: none
 }

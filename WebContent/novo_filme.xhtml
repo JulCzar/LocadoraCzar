@@ -11,23 +11,25 @@
 </h:head>
 
 <h:body style="background: #f0f0f5">
-	<div class="container-fluid d-flex align-items-center justify-content-center" style="height: 100vh; flex-direction: column">
-		<h:messages id="messages" styleClass="warns" infoClass="alert alert-success" errorClass="alert alert-danger"/>
-		<h:form class="container">
+	<div
+		class="container-fluid d-flex align-items-center justify-content-center bg-dark"
+		style="height: 100vh; flex-direction: column">
+		<h:form class="form-signin bg-white p-5 rounded">
 			<h1 class="text-center mb-4">Cadastre um novo filme</h1>
+			<h:messages id="messages" styleClass="warns" infoClass="alert alert-success" errorClass="alert alert-danger"/>
 		  	<div class="form-row">
-			    <div class="form-group col-md-7">
+			    <div class="form-group col-md-5">
 			      <label for="title">Título</label>
 			      <h:inputText class="form-control" id="title" value="#{movieController.entity.title}"/>
 			    </div>
-			    <div class="form-group col-md-3">
-			      <label for="release">Data de Lançamento</label>
+			    <div class="form-group col-md-4">
+			      <label for="release">Lançamento</label>
 			      <h:inputText pt:type="date" class="form-control" id="release" value="#{movieController.entity.release}">
 					<f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
 			      </h:inputText>
 			    </div>
-			    <div class="form-group col-md-2">
-			      <label for="parental">Classificação Indicativa</label>
+			    <div class="form-group col-md-3">
+			      <label for="parental">Classificação</label>
 			      <h:selectOneMenu class="form-control" id="parental" value="#{movieController.entity.rate}">
 			      	<f:selectItems value="#{movieController.parentals}" var="p" itemLabel="#{p.label}" />
 			      </h:selectOneMenu>

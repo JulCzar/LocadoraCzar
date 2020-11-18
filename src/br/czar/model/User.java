@@ -1,16 +1,23 @@
 package br.czar.model;
 
 import java.time.LocalDate;
-import java.util.Base64;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class User {
 	private Integer id;
+	@NotNull
+	@NotBlank(message = "O nome não pode ficar vazio.")
 	private String name;
 	private String lastname;
+	@NotBlank(message = "O email não pode ficar vazio.")
 	private String email;
 	private Privilege privilege;
 	private LocalDate birthdate;
 	private String cpf;
+	@Size(min = 8, message = "A senha deve ter pelo menos 8 caracteres.")
 	private String password;
 	
 	public Integer getId() {

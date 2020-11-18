@@ -16,9 +16,10 @@ public abstract class Controller<T> {
 	}
 
 	public void insert() {
+		System.out.println(getEntity());
 		try {
 			dao.insert(getEntity());
-			Utils.addInfoMessage("Inclusão realizada com sucesso.");
+			Utils.addInfoMessage("Cadastro realizado com sucesso.");
 			clear();
 		} catch (Exception e) {
 			Utils.addErrorMessage("Não é possivel fazer uma inclusão.");

@@ -19,6 +19,9 @@ public class UserDAO implements DAO<User> {
 	@Override
 	public void insert(User obj) throws Exception {
 		Exception exception = null;
+		String email = obj.getEmail();
+		String password = obj.getPassword();
+		String passwordB64 = Utils.base64Parse(password);
 		Connection conn = DAO.getConnection();
 
 		StringBuffer sql = new StringBuffer();
@@ -38,7 +41,7 @@ public class UserDAO implements DAO<User> {
 			stat.setInt(4, obj.getPrivilege().getId());
 			stat.setDate(5, (birthdate == null)?null:Date.valueOf(birthdate));
 			stat.setString(6, obj.getCpf());
-			stat.setString(7, obj.getPassword());
+			stat.setString(7, Utils.hashParse(email + password + passwordB64));
 
 			stat.execute();
 

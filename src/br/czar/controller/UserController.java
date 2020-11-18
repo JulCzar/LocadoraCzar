@@ -6,6 +6,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import br.czar.dao.UserDAO;
+import br.czar.model.Privilege;
 import br.czar.model.User;
 import br.czar.util.Utils;
 
@@ -17,6 +18,7 @@ public class UserController extends Controller<User> implements Serializable {
 	
 	public UserController() {
 		super(new UserDAO());
+		getEntity().setPrivilege(Privilege.valueOf(2));
 	}
 
 	@Override
