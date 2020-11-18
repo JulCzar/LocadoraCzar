@@ -341,14 +341,14 @@ public class MovieDAO implements DAO<Movie> {
 		sql.append("FROM  ");
 		sql.append("  filmes f ");
 		sql.append("Where  ");
-		sql.append("  f.title LIKE ?");
+		sql.append("  UPPER(f.title) LIKE ?");
 		sql.append("ORDER BY f.title ");
 
 		PreparedStatement stat = null;
 		try {
 
 			stat = conn.prepareStatement(sql.toString());
-			stat.setString(1, "%" + query + "%");
+			stat.setString(1, "%" + query.toUpperCase() + "%");
 
 			ResultSet rs = stat.executeQuery();
 
