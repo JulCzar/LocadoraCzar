@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:f="http://xmlns.jcp.org/jsf/core"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:jsf="http://xmlns.jcp.org/jsf"
+xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/resources/templates/body.xhtml">
+	<ui:define name="content">
+		<div class="bg-white container mt-4 p-4 rounded">
+			<h:messages id="messages" styleClass="warns mt-3" infoClass="alert alert-success" errorClass="alert alert-danger"/>
+			<h:form class="input-group mb-3">
+			  <div class="input-group-prepend">
+			    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Nome</button>
+			    <div class="dropdown-menu">
+			      <a class="dropdown-item" href="#">Nome</a>
+			      <a class="dropdown-item" href="#">Email</a>
+			      <a class="dropdown-item" href="#">CPF</a>
+			    </div>
+			  </div>
+			  <h:inputText
+			  	pt:class="form-control"
+			  	pt:placeholder="Digite o nome do usuário"
+			  	pt:aria-label="Digite o nome do usuário"
+			  	pt:aria-describedby="button-addon2"
+			  	value="#{userController.search}">
+				<f:ajax event="keyup"
+					listener="#{userController.searchByName}"
+					execute="@this"
+					render="filmsList messages"/>
+			  </h:inputText>
+			  <div class="input-group-append">
+			    <h:commandButton class="btn btn-outline-secondary" pt:id="button-addon2" actionListener="#{userController.searchByName}" value="Buscar">
+			    	<f:ajax event="click" listener="#{userController.searchByTitle}" execute="@this" render="filmsList messages"/>
+			    </h:commandButton>
+			  </div>
+			</h:form>
+			<h:form id="filmsList">
+				<ul class="list-group">
+				<ui:repeat var="usr" value="#{userController.entityList}">
+  					<a href="#" class="list-group-item list-group-item-action">
+					    <div class="d-flex w-100 justify-content-between">
+					      <h5 class="mb-1">#{usr.name}</h5>
+					      <small>
+					      	<h:outputText value="#{usr.birthdate}">
+					      		<f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
+					      	</h:outputText>
+					      </small>
+					    </div>
+					    <p class="mb-1">#{usr.email}</p>
+					    <small>#{usr.cpf}</small>
+				  	</a>
+				</ui:repeat>
+				</ul>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

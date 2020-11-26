@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/resources/templates/body.xhtml">
+	<ui:define name="content">
+		<h:form class="container mt-4 bg-white rounded" style="flex-direction: column">
+			<div class="jumbotron bg-white">
+			  <div class="d-flex">
+			  	<img class="rounded" src="#{filmDetailsController.movie.image}" height="250" alt=""/>
+			    <div class="ml-4">
+				  	<h1 class="display-4">#{filmDetailsController.movie.title}</h1>
+				    <p class="lead text-justify">#{filmDetailsController.movie.sinopse}</p>
+			    </div>
+			  </div>
+			  <hr class="my-4"/>
+			  <small>Classificação: #{filmDetailsController.movie.rate.label}</small>
+			  <p>Lançamento: <h:outputText value="#{filmDetailsController.movie.release}">
+			  	<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+			  </h:outputText></p>
+			  <h:commandButton pt:class="btn btn-primary"
+			  	value="editar"
+			  	actionListener="#{filmDetailsController.edit}">
+			  	<f:ajax execute="editForm" render="@this"/>
+			  </h:commandButton>
+			  <h:commandButton pt:class="btn ml-1 btn-primary"
+			  	value="Adicionar ao carrinho"
+			  	actionListener="#{filmDetailsController.edit}">
+			  	<f:ajax execute="editForm" render="@this"/>
+			  </h:commandButton>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

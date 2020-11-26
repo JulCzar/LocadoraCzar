@@ -325,7 +325,7 @@ public class MovieDAO implements DAO<Movie> {
 		return movie;
 	}
 	
-	public List<Movie> search(String query) throws Exception {
+	public List<Movie> search(String q, String f) throws Exception {
 		Exception exception = null;
 		Connection conn = DAO.getConnection();
 		List<Movie> movieList = new ArrayList<>();
@@ -348,7 +348,7 @@ public class MovieDAO implements DAO<Movie> {
 		try {
 
 			stat = conn.prepareStatement(sql.toString());
-			stat.setString(1, "%" + query.toUpperCase() + "%");
+			stat.setString(1, "%" + q.toUpperCase() + "%");
 
 			ResultSet rs = stat.executeQuery();
 

@@ -15,3 +15,13 @@ body {
 input[type="date"]::-webkit-calendar-picker-indicator  {
 	display: none
 }
+
+.filmsList {
+	display: grid;
+	grid-template-columns: repeat( auto-fill, minmax(330px, 1fr) );
+	gap: 10px;
+}
+
+.card-container {
+	height: 100%;
+}

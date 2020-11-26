@@ -94,7 +94,8 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User {\n  id: " + id + ",\n  name: " + name + ",\n  lastname: " + lastname + ",\n  email: " + email + ",\n  privilege: "
-				+ privilege + ",\n  birthdate: " + birthdate + ",\n  cpf: " + cpf + ",\n  password: " + password + "\n}";
+		return "User = {\n\tid: " + id + ",\n\tname: " + name + ",\n\tlastname: " + lastname + ",\n\temail: " + email
+				+ ",\n\tprivilege: " + privilege + ",\n\tbirthdate: " + birthdate + ",\n\tcpf: " + cpf
+				+ ",\n\tpassword: " + password + "\n}";
 	}
 }

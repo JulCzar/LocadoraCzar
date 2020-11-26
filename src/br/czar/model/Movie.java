@@ -73,4 +73,10 @@ public class Movie {
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		return "Movie = {\n\tid: " + id + ",\n\ttitle: " + title + ",\n\tsinopse: " + sinopse + ",\n\trelease: "
+				+ release + ",\n\timage: " + image + ",\n\trate: " + rate + "\n}";
+	}
+	
 }

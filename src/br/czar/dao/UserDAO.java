@@ -222,7 +222,7 @@ public class UserDAO implements DAO<User> {
 		sql.append("  u.password ");
 		sql.append("FROM  ");
 		sql.append("  usuario u ");
-		sql.append("ORDER BY u.nome ");
+		sql.append("ORDER BY u.name ");
 
 		PreparedStatement stat = null;
 		try {
@@ -241,7 +241,7 @@ public class UserDAO implements DAO<User> {
 				user.setPrivilege(Privilege.valueOf(rs.getInt("privilege")));
 				user.setBirthdate(birthdate == null ? null : birthdate.toLocalDate());
 				user.setCpf(rs.getString("cpf"));
-				user.setPassword(rs.getString("pasword"));
+				user.setPassword(rs.getString("password"));
 
 				userList.add(user);
 			}
@@ -394,7 +394,7 @@ public class UserDAO implements DAO<User> {
 		return null;
 	}
 
-	public List<User> search(String q) throws Exception {
+	public List<User> search(String q, String f) throws Exception {
 		Exception exception = null;
 		Connection conn = DAO.getConnection();
 		List<User> userList = new ArrayList<>();
@@ -412,14 +412,14 @@ public class UserDAO implements DAO<User> {
 		sql.append("FROM  ");
 		sql.append("  usuario u ");
 		sql.append("WHERE  ");
-		sql.append("  u.nome LIKE ? ");
-		sql.append("ORDER BY u.nome ");
+		sql.append("  UPPER(u.name) LIKE ? ");
+		sql.append("ORDER BY u.name ");
 
 		PreparedStatement stat = null;
 		try {
 
 			stat = conn.prepareStatement(sql.toString());
-			stat.setString(1, "%" + q + "%");
+			stat.setString(1, "%" + q.toUpperCase() + "%");
 
 			ResultSet rs = stat.executeQuery();
 
@@ -433,7 +433,7 @@ public class UserDAO implements DAO<User> {
 				user.setPrivilege(Privilege.valueOf(rs.getInt("privilege")));
 				user.setBirthdate(birthdate == null ? null : birthdate.toLocalDate());
 				user.setCpf(rs.getString("cpf"));
-				user.setPassword(rs.getString("pasword"));
+				user.setPassword(rs.getString("password"));
 
 				userList.add(user);
 			}

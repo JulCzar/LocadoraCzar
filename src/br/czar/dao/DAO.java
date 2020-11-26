@@ -13,7 +13,7 @@ public interface DAO<T> {
 	public void delete(T obj) throws Exception;
 	public List<T> getAll() throws Exception;
 	public T getOne(T obj) throws Exception;
-	public List<T> search(String q) throws Exception;
+	public List<T> search(String q, String f) throws Exception;
 	
 	public static Connection getConnection() {
 		Connection conn = null;

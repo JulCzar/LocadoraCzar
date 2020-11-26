@@ -1,55 +1,59 @@
 <!DOCTYPE html>
 <html lang="pt-br"
-xmlns="http://www.w3.org/1999/xhtml"
-xmlns:f="http://xmlns.jcp.org/jsf/core"
-xmlns:h="http://xmlns.jcp.org/jsf/html"
-xmlns:jsf="http://xmlns.jcp.org/jsf"
-xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 <ui:composition template="/resources/templates/body.xhtml">
 	<ui:define name="content">
-		<div class="container-fluid align-items-center justify-content-center p-4 bg-dark" style="height: 100vh; flex-direction: column">
+		<div class="align-items-center bg-white container rounded mt-4 p-4">
 			<h:messages id="messages" styleClass="warns mt-3" infoClass="alert alert-success" errorClass="alert alert-danger"/>
 			<h:form class="input-group mb-3">
+			  <div class="input-group-prepend">
+			    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Título</button>
+			    <div class="dropdown-menu">
+			      <a class="dropdown-item" href="#">Título</a>
+			      <a class="dropdown-item" href="#">Ano</a>
+			    </div>
+			  </div>
 			  <h:inputText
 			  	pt:class="form-control"
 			  	pt:placeholder="Digite o nome do filme"
 			  	pt:aria-label="Digite o nome do filme"
 			  	pt:aria-describedby="button-addon2"
-			  	value="#{movieController.search}">
+			  	value="#{movieSearchController.query}">
 				<f:ajax event="keyup"
-					listener="#{movieController.searchByTitle}"
+					listener="#{movieSearchController.search}"
 					execute="@this"
 					render="filmsList messages"/>
 			  </h:inputText>
 			  <div class="input-group-append">
 			    <h:commandButton class="btn btn-outline-secondary" pt:id="button-addon2" actionListener="#{movieController.searchByTitle}" value="Buscar">
-			    	<f:ajax event="click" listener="#{movieController.searchByTitle}" execute="@this" render="filmsList messages"/>
+			    	<f:ajax event="click" listener="#{movieSearchController.search}" execute="@this" render="filmsList messages"/>
 			    </h:commandButton>
 			  </div>
 			</h:form>
-			<h:form id="filmsList">
-				<div class="d-flex flex-wrap justify-content-between">
-				<ui:repeat var="mov" value="#{movieController.entityList}">
-					<a jsf:action="#{movieController.getMovieDetails(mov)}">
-					<div class="card mb-3 shadow-sm" style="max-width: 30vmax; cursor:pointer" data-toggle="modal" data-target="#staticBackdrop">
-					  <div class="row no-gutters">
-					    <div class="col-md-4">
-					      <img src="#{mov.image}" class="card-img" alt="..."/>
-					    </div>
-					    <div class="col-md-8">
-					      <div class="card-body">
-					        <h5 class="card-title">#{mov.title}</h5>
-					        <p class="card-text text-justify">#{mov.sinopse.substring(0, 120)}</p>
-					      </div>
-					    </div>
-						<f:ajax execute="@this" render="editForm"/>
-					  </div>
-					</div>
+			<div jsf:id="filmsList" class="filmsList">
+				<ui:repeat var="mov" value="#{movieSearchController.movieList}">
+					<a href="/LocadoraCzar/faces/filme.xhtml?id=#{mov.id}">
+						<div class="card mb-3 shadow-sm">
+						  <div class="row no-gutters">
+						    <div class="col-md-4">
+						      <img src="#{mov.image}" class="card-img" alt="..."/>
+						    </div>
+						    <div class="col-md-8">
+						      <div class="card-body">
+						        <h5 class="card-title">#{mov.title}</h5>
+						        <p class="card-text text-justify">#{mov.release.year}</p>
+						      </div>
+						    </div>
+						  </div>
+						</div>
 					</a>
 				</ui:repeat>
-				</div>
-			</h:form>
+			</div>
 		</div>
 	</ui:define>
 </ui:composition>
