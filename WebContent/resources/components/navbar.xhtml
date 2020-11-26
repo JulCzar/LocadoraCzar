@@ -40,7 +40,7 @@
 		        	aria-expanded="false"
 		        >Logado como #{templateController.user.name}</a>
 		        <div class="dropdown-menu" aria-labelledby="profileInfo">
-		          <a class="dropdown-item" href="#">Perfil</a>
+		          <a class="dropdown-item" href="/LocadoraCzar/faces/user.xhtml?u=#{templateController.user.id}">Perfil</a>
 		          <hr class="dropdown-divider"/>
 		          <h:commandLink class="dropdown-item" actionListener="#{templateController.logout}">Sair</h:commandLink>
 		        </div>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:f="http://xmlns.jcp.org/jsf/core"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:jsf="http://xmlns.jcp.org/jsf"
+xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/resources/templates/body.xhtml">
+	<ui:define name="navbar"/>
+	<ui:define name="content">
+		<div
+		class="container-fluid d-flex align-items-center justify-content-center bg-dark"
+		style="height: 100vh; flex-direction: column">
+		<h:form class="form-signin bg-white p-5 rounded">
+			<h1 class="text-center mb-4">Editando dados do filme</h1>
+			<h:messages id="messages" styleClass="warns" infoClass="alert alert-success" errorClass="alert alert-danger"/>
+		  	<div class="form-row">
+			    <div class="form-group col-md-5">
+			      <label for="title">Título</label>
+			      <h:inputText class="form-control" id="title" value="#{movieController.entity.title}"/>
+			    </div>
+			    <div class="form-group col-md-4">
+			      <label for="release">Lançamento</label>
+			      <h:inputText pt:type="date" class="form-control" id="release" value="#{movieController.entity.release}">
+					<f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+			      </h:inputText>
+			    </div>
+			    <div class="form-group col-md-3">
+			      <label for="parental">Classificação</label>
+			      <h:selectOneMenu class="form-control" id="parental" value="#{movieController.entity.rate}">
+			      	<f:selectItems value="#{movieController.parentals}" var="p" itemLabel="#{p.label}" />
+			      </h:selectOneMenu>
+			    </div>
+		  	</div>
+			<div class="form-group">
+			    <label for="sinopse">Sinopse</label>
+			    <textarea class="form-control" id="sinopse" rows="3" jsf:value="#{movieController.entity.sinopse}"></textarea>
+			</div>
+			<div class="form-group">
+			    <label for="imageURL">URL da capa</label>
+			    <h:inputText class="form-control" id="imageURL" rows="3" value="#{movieController.entity.image}"/>
+			</div>
+			<h:commandButton class="btn btn-primary" value="Salvar Alterações" actionListener="#{movieController.update}">
+				<f:ajax execute="@form" render="@form messages"/>
+			</h:commandButton>
+			<h:commandButton class="btn ml-2 btn-primary" value="Excluir Filme" actionListener="#{movieController.delete()}">
+				<f:ajax execute="@form" render="@form messages"/>
+			</h:commandButton>
+		</h:form>
+	</div>
+	</ui:define>
+</ui:composition>
+</html>

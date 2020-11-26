@@ -39,7 +39,7 @@ xmlns:ui="http://java.sun.com/jsf/facelets">
 			<h:form id="filmsList">
 				<ul class="list-group">
 				<ui:repeat var="usr" value="#{userController.entityList}">
-  					<a href="#" class="list-group-item list-group-item-action">
+  					<a href="/LocadoraCzar/faces/user.xhtml?u=#{usr.id}" class="list-group-item list-group-item-action">
 					    <div class="d-flex w-100 justify-content-between">
 					      <h5 class="mb-1">#{usr.name}</h5>
 					      <small>

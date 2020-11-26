@@ -10,6 +10,7 @@ import javax.inject.Named;
 import br.czar.dao.MovieDAO;
 import br.czar.model.Movie;
 import br.czar.model.Parental;
+import br.czar.model.User;
 import br.czar.util.Utils;
 
 @Named
@@ -19,6 +20,9 @@ public class MovieController extends Controller<Movie> implements Serializable {
 	
 	public MovieController() {
 		super(new MovieDAO());
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
+		flash.keep("movieInfo");
+		setEntity((Movie)flash.get("movieInfo"));
 	}
 	
 	public void getMovieDetails(Movie m) {		

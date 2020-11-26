@@ -2,6 +2,8 @@ package br.czar.controller;
 
 import java.io.Serializable;
 
+import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
@@ -19,7 +21,10 @@ public class UserController extends Controller<User> implements Serializable {
 	
 	public UserController() {
 		super(new UserDAO());
-		getEntity().setPrivilege(Privilege.valueOf(2));
+		getEntity().setPrivilege(Privilege.USER);
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
+		flash.keep("userInfo");
+		setEntity((User)flash.get("userInfo"));
 	}
 	
 	public void searchByName() {
@@ -31,7 +36,12 @@ public class UserController extends Controller<User> implements Serializable {
 			e.printStackTrace();
 		}
 	}
-
+	
+	@Override
+	public void update() {
+		super.update();
+	}
+	
 	@Override
 	public User getEntity() {
 		if (this.entity == null)

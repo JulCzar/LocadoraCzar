@@ -85,6 +85,9 @@ public class UserDAO implements DAO<User> {
 	@Override
 	public void update(User obj) throws Exception {
 		Exception exception = null;
+		String email = obj.getEmail();
+		String password = obj.getPassword();
+		String passwordB64 = Utils.base64Parse(password);
 		Connection conn = DAO.getConnection();
 
 		StringBuffer sql = new StringBuffer();
@@ -110,7 +113,7 @@ public class UserDAO implements DAO<User> {
 			stat.setInt(4, obj.getPrivilege().getId());
 			stat.setDate(5, (birthdate == null)?null:Date.valueOf(birthdate));
 			stat.setString(6, obj.getCpf());
-			stat.setObject(7, obj.getPassword());
+			stat.setObject(7, Utils.hashParse(email + password + passwordB64));
 			stat.setInt(8, obj.getId());
 
 			stat.execute();
@@ -304,7 +307,7 @@ public class UserDAO implements DAO<User> {
 			ResultSet rs = stat.executeQuery();
 
 			if (rs.next()) {
-				Date birthdate = rs.getDate("data_nascimento");
+				Date birthdate = rs.getDate("birthdate");
 				user = new User();
 				user.setId(rs.getInt("id"));
 				user.setName(rs.getString("name"));
@@ -313,7 +316,6 @@ public class UserDAO implements DAO<User> {
 				user.setPrivilege(Privilege.valueOf(rs.getInt("privilege")));
 				user.setBirthdate(birthdate == null ? null : birthdate.toLocalDate());
 				user.setCpf(rs.getString("cpf"));
-				user.setPassword(rs.getString("password"));
 			}
 
 		} catch (SQLException e) {

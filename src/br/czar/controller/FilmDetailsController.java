@@ -26,19 +26,19 @@ public class FilmDetailsController implements Serializable {
 			setMovie(dao.getOne(movie));
 		} catch (Exception e) {
 			e.printStackTrace();
-			Utils.addErrorMessage("Não foi possível encontrar a midia no banco de dados.");
+			Utils.addErrorMessage("Não foi possível encontrar o filme no banco de dados.");
 			return;
 		}
 		
-		Flash flash =  FacesContext.getCurrentInstance().getExternalContext().getFlash();
-		flash.put("movieInfo", movie);
-		Utils.redirect("index.xhtml");
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
+		flash.put("movieInfo", getMovie());
+		Utils.redirect("editFilm.xhtml");
 	}
 
 	public Movie getMovieDetails() {
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String id = params.get("id");
-		Movie movie = new Movie();
+		movie = new Movie();
 
 		movie.setId(id!=null?Integer.parseInt(id):0);
 		
