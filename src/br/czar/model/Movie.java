@@ -12,6 +12,8 @@ public class Movie {
 	private String sinopse;
 	private LocalDate release;
 	private String image;
+	private Double price;
+	private Integer stock;
 	private Parental rate;
 
 	public Integer getId() {
@@ -43,6 +45,18 @@ public class Movie {
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+	public Double getPrice() {
+		return price;
+	}
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+	public Integer getStock() {
+		return stock;
+	}
+	public void setStock(Integer stock) {
+		this.stock = stock;
 	}
 	public Parental getRate() {
 		return rate;
@@ -76,7 +90,7 @@ public class Movie {
 	@Override
 	public String toString() {
 		return "Movie = {\n\tid: " + id + ",\n\ttitle: " + title + ",\n\tsinopse: " + sinopse + ",\n\trelease: "
-				+ release + ",\n\timage: " + image + ",\n\trate: " + rate + "\n}";
-	}
-	
+				+ release + ",\n\timage: " + image + ",\n\tprice: " + price + ",\n\tstock: " + stock + ",\n\trate: "
+				+ rate + "\n}";
+	}	
 }

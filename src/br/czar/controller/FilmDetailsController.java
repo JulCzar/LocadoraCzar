@@ -10,16 +10,38 @@ import javax.inject.Named;
 
 import br.czar.dao.DAO;
 import br.czar.dao.MovieDAO;
+import br.czar.model.Cart;
 import br.czar.model.Movie;
+import br.czar.model.SellItem;
+import br.czar.util.SessionStorage;
 import br.czar.util.Utils;
 
 @Named
 @ViewScoped
 public class FilmDetailsController implements Serializable {
 	private static final long serialVersionUID = -9167731946763516124L;
+	private static final SessionStorage sessionStorage = SessionStorage.getInstance();
 	
 	DAO<Movie> dao = new MovieDAO();
 	Movie movie;
+	
+	public void addToCart() {
+		addToCart(movie);
+	}
+	
+	public void addToCart(Movie mov) {
+		Object obj = sessionStorage.getItem("cart");
+		
+		Cart cart = (obj == null) ? new Cart() : (Cart)obj;
+		
+		SellItem item = new SellItem(mov);
+		
+		cart.addToCart(item);
+		
+		sessionStorage.setItem("cart", cart);
+		
+		Utils.addInfoMessage("Filme Adicionado ao Carrinho!");
+	}
 	
 	public void edit() {
 		try {

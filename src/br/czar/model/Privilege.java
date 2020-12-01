@@ -2,7 +2,8 @@ package br.czar.model;
 
 public enum Privilege {
 	ADMIN(1, "Administrador"),
-	USER(2, "Usuario");
+	USER(2, "Usuario"),
+	EMPLOYEE(3, "Funcionario");
 	
 	private int id;
 	private String label;

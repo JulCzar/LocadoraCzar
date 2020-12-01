@@ -10,6 +10,7 @@
 	<ui:define name="content">
 		<h:form class="container mt-4 bg-white rounded" style="flex-direction: column">
 			<div class="jumbotron bg-white">
+				<h:messages id="messages" styleClass="warns mt-3" infoClass="alert alert-success" errorClass="alert alert-danger"/>
 			  <div class="d-flex">
 			  	<img class="rounded" src="#{filmDetailsController.movie.image}" height="250" alt=""/>
 			    <div class="ml-4">
@@ -29,8 +30,8 @@
 			  </h:commandButton>
 			  <h:commandButton pt:class="btn ml-1 btn-primary"
 			  	value="Adicionar ao carrinho"
-			  	actionListener="#{filmDetailsController.edit}">
-			  	<f:ajax execute="editForm" render="@this"/>
+			  	actionListener="#{filmDetailsController.addToCart()}">
+			  	<f:ajax execute="editForm" render="messages"/>
 			  </h:commandButton>
 			</div>
 		</h:form>
