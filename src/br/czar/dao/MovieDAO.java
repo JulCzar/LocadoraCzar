@@ -207,6 +207,8 @@ public class MovieDAO implements DAO<Movie> {
 		sql.append("  f.sinopse, ");
 		sql.append("  f.release, ");
 		sql.append("  f.rate, ");
+		sql.append("  f.price, ");
+		sql.append("  f.stock, ");
 		sql.append("  f.image ");
 		sql.append("FROM  ");
 		sql.append("  filmes f ");
@@ -225,6 +227,8 @@ public class MovieDAO implements DAO<Movie> {
 				movie.setId(rs.getInt("id"));
 				movie.setTitle(rs.getString("title"));
 				movie.setSinopse(rs.getString("sinopse"));
+				movie.setPrice(rs.getDouble("price"));
+				movie.setStock(rs.getInt("stock"));
 				movie.setRelease(release == null ? null : release.toLocalDate());
 				movie.setRate(Parental.valueOf(rs.getInt("rate")));
 				movie.setImage(rs.getString("image"));
@@ -274,6 +278,8 @@ public class MovieDAO implements DAO<Movie> {
 		sql.append("  f.sinopse, ");
 		sql.append("  f.release, ");
 		sql.append("  f.rate, ");
+		sql.append("  f.price, ");
+		sql.append("  f.stock, ");
 		sql.append("  f.image ");
 		sql.append("FROM  ");
 		sql.append("  filmes f ");
@@ -291,6 +297,8 @@ public class MovieDAO implements DAO<Movie> {
 				Date release = rs.getDate("release");
 				movie.setId(rs.getInt("id"));
 				movie.setTitle(rs.getString("title"));
+				movie.setPrice(rs.getDouble("price"));
+				movie.setStock(rs.getInt("stock"));
 				movie.setSinopse(rs.getString("sinopse"));
 				movie.setRelease(release == null ? null : release.toLocalDate());
 				movie.setRate(Parental.valueOf(rs.getInt("rate")));
@@ -337,6 +345,8 @@ public class MovieDAO implements DAO<Movie> {
 		sql.append("  f.sinopse, ");
 		sql.append("  f.release, ");
 		sql.append("  f.rate, ");
+		sql.append("  f.price, ");
+		sql.append("  f.stock, ");
 		sql.append("  f.image ");
 		sql.append("FROM  ");
 		sql.append("  filmes f ");
@@ -358,6 +368,8 @@ public class MovieDAO implements DAO<Movie> {
 				movie.setId(rs.getInt("id"));
 				movie.setTitle(rs.getString("title"));
 				movie.setSinopse(rs.getString("sinopse"));
+				movie.setPrice(rs.getDouble("price"));
+				movie.setStock(rs.getInt("stock"));
 				movie.setRelease(release == null ? null : release.toLocalDate());
 				movie.setRate(Parental.valueOf(rs.getInt("rate")));
 				movie.setImage(rs.getString("image"));

@@ -1,13 +1,25 @@
 package br.czar.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sell {
+	private Integer id;
 	private LocalDate date;
 	private User user;
 	private List<SellItem> movies;
 	
+	public Sell() {
+		this.movies = new ArrayList<>();
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public LocalDate getDate() {
 		return date;
 	}

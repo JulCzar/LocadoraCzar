@@ -29,7 +29,12 @@ xmlns:ui="http://java.sun.com/jsf/facelets">
 				  	</a>
 				</ui:repeat>
 				</ul>
+				<hr jsf:rendered="#{cartController.cart.items.size() != 0}"/>
+				<h:commandButton rendered="#{cartController.cart.items.size() != 0}" class="btn btn-primary" value="Finalizar Compra" actionListener="#{cartController.completeSell}">
+					<f:ajax render="@all" execute="@this"/>
+				</h:commandButton>
 			</h:form>
+			<h:outputLabel rendered="#{cartController.cart.items.size() == 0}" value="Ainda não há nada no seu carrinho!"/>
 		</div>
 	</ui:define>
 </ui:composition>
