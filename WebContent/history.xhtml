@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:f="http://xmlns.jcp.org/jsf/core"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:jsf="http://xmlns.jcp.org/jsf"
+xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/resources/templates/body.xhtml">
+	<ui:define name="content">
+		<h:form class="bg-white container mt-4 p-4 rounded">
+			<h1>Histórico de compras</h1>
+			<div class="list-group">
+			<ui:repeat var="s" value="#{historyController.sellList}">
+			  <a href="/LocadoraCzar/faces/sellDetails.xhtml?id=#{s.id}" class="list-group-item list-group-item-action" pt:tabindex="-1" pt:aria-disabled="true">
+			  	<div class="d-flex w-100 justify-content-between">
+			      <h5 class="mb-1">Código da venda: #{s.id}</h5>
+			      <small>R$#{s.total}</small>
+			    </div>
+			    <p class="mb-1"><h:outputText value="#{s.date}">
+		    		<f:convertDateTime pattern="dd/MM/yyyy" type="localDateTime"/>
+		    	</h:outputText></p>
+			  </a>
+			</ui:repeat>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

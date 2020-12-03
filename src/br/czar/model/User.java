@@ -20,6 +20,14 @@ public class User {
 	@Size(min = 8, message = "A senha deve ter pelo menos 8 caracteres.")
 	private String password;
 	
+	public User() {
+		
+	}
+	
+	public User(Integer id) {
+		this.id = id;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

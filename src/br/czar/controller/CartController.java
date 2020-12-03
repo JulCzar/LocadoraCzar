@@ -1,8 +1,6 @@
 package br.czar.controller;
 
-import java.io.Serializable;
-
-import javax.faces.view.ViewScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import br.czar.dao.VendaDAO;
@@ -14,20 +12,16 @@ import br.czar.util.SessionStorage;
 import br.czar.util.Utils;
 
 @Named
-@ViewScoped
-public class CartController implements Serializable {
+@RequestScoped
+public class CartController {
 	private static final SessionStorage sessionStorage = SessionStorage.getInstance();
-	private static final long serialVersionUID = -7848983003715086991L;
-	private Cart cart;
+
 	private Sell sell;
 	
 	public Cart getCart() {
-		if (cart == null) {
-			Object obj = sessionStorage.getItem("cart");
-			cart = (obj == null)?new Cart():(Cart)obj;
-		}
+		Object obj = sessionStorage.getItem("cart");
 		
-		return cart;
+		return (obj == null)?new Cart():(Cart)obj;
 	}
 	public Double getTotalPrice() {
 		Double price = 0.0;
@@ -63,7 +57,7 @@ public class CartController implements Serializable {
 	
 	public Sell getSell() {
 		if (sell == null) 
-			sell = new Sell();
+			sell = new Sell(getTotalPrice());
 		
 		Object obj = sessionStorage.getItem("cart");
 		if (obj != null)

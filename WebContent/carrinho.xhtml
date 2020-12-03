@@ -14,24 +14,22 @@ xmlns:ui="http://java.sun.com/jsf/facelets">
 			<h:messages id="messages" styleClass="warns mt-3" infoClass="alert alert-success" errorClass="alert alert-danger"/>
 			<h:form id="filmsList">
 				<ul class="list-group">
-				<ui:repeat var="item" value="#{cartController.cart.items}">
+				<ui:repeat id="carrinho" var="item" value="#{cartController.cart.items}">
   					<a href="/LocadoraCzar/faces/filme.xhtml?id=#{item.movie.id}" class="list-group-item list-group-item-action">
 					    <div class="d-flex w-100 justify-content-between">
 					      <h5 class="mb-1">#{item.movie.title}</h5>
 					      <small>
-					      	<h:outputText value="#{item.movie.release}">
-					      		<f:convertDateTime type="localDate" pattern="yyyy"/>
-					      	</h:outputText>
+					      	<h:outputText value="R$ #{item.totalPrice}"/>
 					      </small>
 					    </div>
 					    <p class="mb-1">Quantidade: #{item.quantity}</p>
-					    <small>#{item.quantity}</small>
 				  	</a>
 				</ui:repeat>
 				</ul>
 				<hr jsf:rendered="#{cartController.cart.items.size() != 0}"/>
+				<div jsf:rendered="#{cartController.cart.items.size() != 0}">Total: R$ #{cartController.totalPrice}</div>
 				<h:commandButton rendered="#{cartController.cart.items.size() != 0}" class="btn btn-primary" value="Finalizar Compra" actionListener="#{cartController.completeSell}">
-					<f:ajax render="@all" execute="@this"/>
+					<f:ajax render="carrinho messages" execute="@this"/>
 				</h:commandButton>
 			</h:form>
 			<h:outputLabel rendered="#{cartController.cart.items.size() == 0}" value="Ainda não há nada no seu carrinho!"/>

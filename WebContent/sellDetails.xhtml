@@ -10,13 +10,7 @@
 	<ui:define name="content">
 		<h:form class="container mt-4 bg-white rounded" style="flex-direction: column">
 			<div class="jumbotron bg-white">
-			  	<h1 class="display-4">#{userDetailsController.user.name} #{userDetailsController.user.lastname}</h1>
-			    <p class="lead text-justify">#{userDetailsController.user.email}</p>
-				<hr class="my-4"/>
-				<small>Nascido em: <h:outputText value="#{userDetailsController.user.birthdate}">
-					<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
-				</h:outputText></small>
-				<p>CPF: #{userDetailsController.user.cpf}</p>
+			  	<h1 class="display-4">#{sellDetailsController.sellDetails.id}</h1>
 				<h:commandButton pt:class="btn btn-primary"
 				  	value="editar"
 				  	actionListener="#{userDetailsController.edit}">

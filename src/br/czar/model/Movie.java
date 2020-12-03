@@ -8,13 +8,20 @@ public class Movie {
 	private Integer id;
 	@NotBlank(message = "O Filme precisa possuir um título.")
 	private String title;
-	@NotBlank(message = "O Filme precisa possuir sinópse.")
+	@NotBlank(message = "O Filme precisa possuir uma sinópse.")
 	private String sinopse;
 	private LocalDate release;
 	private String image;
 	private Double price;
 	private Integer stock;
 	private Parental rate;
+	
+	public Movie() {
+		
+	}	
+	public Movie(Integer id) {
+		this.id = id;
+	}
 
 	public Integer getId() {
 		return id;

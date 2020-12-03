@@ -29,6 +29,9 @@ public class SellItem {
 	public Double getPrice() {
 		return price;
 	}
+	public Double getTotalPrice() {
+		return getPrice() * quantity;
+	}
 	public void setPrice(Double price) {
 		this.price = price;
 	}
