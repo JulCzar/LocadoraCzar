@@ -85,9 +85,6 @@ public class UserDAO implements DAO<User> {
 	@Override
 	public void update(User obj) throws Exception {
 		Exception exception = null;
-		String email = obj.getEmail();
-		String password = obj.getPassword();
-		String passwordB64 = Utils.base64Parse(password);
 		Connection conn = DAO.getConnection();
 
 		StringBuffer sql = new StringBuffer();
@@ -113,7 +110,7 @@ public class UserDAO implements DAO<User> {
 			stat.setInt(4, obj.getPrivilege().getId());
 			stat.setDate(5, (birthdate == null)?null:Date.valueOf(birthdate));
 			stat.setString(6, obj.getCpf());
-			stat.setObject(7, Utils.hashParse(email + password + passwordB64));
+			stat.setString(7, obj.getPassword());
 			stat.setInt(8, obj.getId());
 
 			stat.execute();
@@ -313,6 +310,7 @@ public class UserDAO implements DAO<User> {
 				user.setName(rs.getString("name"));
 				user.setLastname(rs.getString("lastname"));
 				user.setEmail(rs.getString("email"));
+				user.setPassword(rs.getString("password"));
 				user.setPrivilege(Privilege.valueOf(rs.getInt("privilege")));
 				user.setBirthdate(birthdate == null ? null : birthdate.toLocalDate());
 				user.setCpf(rs.getString("cpf"));
@@ -346,6 +344,54 @@ public class UserDAO implements DAO<User> {
 		return user;
 	}
 
+	public boolean getOne(String email) throws Exception {
+		Exception exception = null;
+		Connection conn = DAO.getConnection();
+		
+		boolean hasEmailRegistered = false;
+
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT u.id FROM usuario u WHERE u.email = ? ");
+
+		PreparedStatement stat = null;
+		try {
+
+			stat = conn.prepareStatement(sql.toString());
+			stat.setString(1, email);
+
+			ResultSet rs = stat.executeQuery();
+
+			if (rs.next())
+				hasEmailRegistered = true;
+
+		} catch (SQLException e) {
+			Utils.addErrorMessage("Não foi possivel buscar os dados do usuario.");
+			e.printStackTrace();
+			exception = new Exception("Erro ao executar um sql em UsuarioDAO.");
+		} finally {
+			try {
+				if (!stat.isClosed())
+					stat.close();
+			} catch (SQLException e) {
+				System.out.println("Erro ao fechar o Statement");
+				e.printStackTrace();
+			}
+
+			try {
+				if (!conn.isClosed())
+					conn.close();
+			} catch (SQLException e) {
+				System.out.println("Erro a o fechar a conexao com o banco.");
+				e.printStackTrace();
+			}
+		}
+
+		if (exception != null)
+			throw exception;
+
+		return hasEmailRegistered;
+	}
+	
 	public static User validateLogin(User obj) {
 		String email = obj.getEmail();
 		String password = obj.getPassword();
@@ -397,6 +443,20 @@ public class UserDAO implements DAO<User> {
 	}
 
 	public List<User> search(String q, String f) throws Exception {
+		switch (f) {
+			case "1":
+				return searchUserName(q);
+			case "2":
+				return searchEmail(q);
+			case "3":
+				return searchCpf(q);
+			default:
+				throw new Exception("Parametro de filtro não existe!");
+		}
+	}
+	
+	private List<User> searchUserName(String q) throws Exception {
+
 		Exception exception = null;
 		Connection conn = DAO.getConnection();
 		List<User> userList = new ArrayList<>();
@@ -415,6 +475,150 @@ public class UserDAO implements DAO<User> {
 		sql.append("  usuario u ");
 		sql.append("WHERE  ");
 		sql.append("  UPPER(u.name) LIKE ? ");
+		sql.append("ORDER BY u.name ");
+
+		PreparedStatement stat = null;
+		try {
+
+			stat = conn.prepareStatement(sql.toString());
+			stat.setString(1, "%" + q.toUpperCase() + "%");
+
+			ResultSet rs = stat.executeQuery();
+
+			while (rs.next()) {
+				User user = new User();
+				Date birthdate = rs.getDate("birthdate");
+				user.setId(rs.getInt("id"));
+				user.setName(rs.getString("name"));
+				user.setLastname(rs.getString("lastname"));
+				user.setEmail(rs.getString("email"));
+				user.setPrivilege(Privilege.valueOf(rs.getInt("privilege")));
+				user.setBirthdate(birthdate == null ? null : birthdate.toLocalDate());
+				user.setCpf(rs.getString("cpf"));
+				user.setPassword(rs.getString("password"));
+
+				userList.add(user);
+			}
+
+		} catch (SQLException e) {
+			Utils.addErrorMessage("Não foi possivel buscar os dados do usuario.");
+			e.printStackTrace();
+			exception = new Exception("Erro ao executar um sql em UsuarioDAO.");
+		} finally {
+			try {
+				if (!stat.isClosed())
+					stat.close();
+			} catch (SQLException e) {
+				System.out.println("Erro ao fechar o Statement");
+				e.printStackTrace();
+			}
+
+			try {
+				if (!conn.isClosed())
+					conn.close();
+			} catch (SQLException e) {
+				System.out.println("Erro a o fechar a conexao com o banco.");
+				e.printStackTrace();
+			}
+		}
+
+		if (exception != null)
+			throw exception;
+
+		return userList;
+	}
+	
+	private List<User> searchEmail(String q) throws Exception {
+		Exception exception = null;
+		Connection conn = DAO.getConnection();
+		List<User> userList = new ArrayList<>();
+
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT ");
+		sql.append("  u.id, ");
+		sql.append("  u.name, ");
+		sql.append("  u.lastname, ");
+		sql.append("  u.email, ");
+		sql.append("  u.privilege, ");
+		sql.append("  u.birthdate, ");
+		sql.append("  u.cpf, ");
+		sql.append("  u.password ");
+		sql.append("FROM  ");
+		sql.append("  usuario u ");
+		sql.append("WHERE  ");
+		sql.append("  UPPER(u.email) LIKE ? ");
+		sql.append("ORDER BY u.name ");
+
+		PreparedStatement stat = null;
+		try {
+
+			stat = conn.prepareStatement(sql.toString());
+			stat.setString(1, "%" + q.toUpperCase() + "%");
+
+			ResultSet rs = stat.executeQuery();
+
+			while (rs.next()) {
+				User user = new User();
+				Date birthdate = rs.getDate("birthdate");
+				user.setId(rs.getInt("id"));
+				user.setName(rs.getString("name"));
+				user.setLastname(rs.getString("lastname"));
+				user.setEmail(rs.getString("email"));
+				user.setPrivilege(Privilege.valueOf(rs.getInt("privilege")));
+				user.setBirthdate(birthdate == null ? null : birthdate.toLocalDate());
+				user.setCpf(rs.getString("cpf"));
+				user.setPassword(rs.getString("password"));
+
+				userList.add(user);
+			}
+
+		} catch (SQLException e) {
+			Utils.addErrorMessage("Não foi possivel buscar os dados do usuario.");
+			e.printStackTrace();
+			exception = new Exception("Erro ao executar um sql em UsuarioDAO.");
+		} finally {
+			try {
+				if (!stat.isClosed())
+					stat.close();
+			} catch (SQLException e) {
+				System.out.println("Erro ao fechar o Statement");
+				e.printStackTrace();
+			}
+
+			try {
+				if (!conn.isClosed())
+					conn.close();
+			} catch (SQLException e) {
+				System.out.println("Erro a o fechar a conexao com o banco.");
+				e.printStackTrace();
+			}
+		}
+
+		if (exception != null)
+			throw exception;
+
+		return userList;
+	}
+	
+	private List<User> searchCpf(String q) throws Exception {
+		Exception exception = null;
+		Connection conn = DAO.getConnection();
+		List<User> userList = new ArrayList<>();
+
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT ");
+		sql.append("  u.id, ");
+		sql.append("  u.name, ");
+		sql.append("  u.lastname, ");
+		sql.append("  u.email, ");
+		sql.append("  u.privilege, ");
+		sql.append("  u.birthdate, ");
+		sql.append("  u.cpf, ");
+		sql.append("  u.password ");
+		sql.append("FROM  ");
+		sql.append("  usuario u ");
+		sql.append("WHERE  ");
+		sql.append("  UPPER(u.cpf) LIKE ? ");
 		sql.append("ORDER BY u.name ");
 
 		PreparedStatement stat = null;

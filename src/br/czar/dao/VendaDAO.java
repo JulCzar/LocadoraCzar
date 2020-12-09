@@ -167,6 +167,7 @@ public class VendaDAO implements DAO<Sell>{
 				venda.setDate(rs.getTimestamp("date").toLocalDateTime());
 				venda.setTotal(rs.getDouble("total"));
 				venda.setUser(user);
+				venda.setMovies(getAllSellItem(venda));
 
 				listaVenda.add(venda);
 			}
@@ -196,6 +197,68 @@ public class VendaDAO implements DAO<Sell>{
 			throw exception;
 
 		return listaVenda;
+	}
+	
+	private List<SellItem> getAllSellItem(Sell sell) throws Exception {
+		Exception exception = null;
+		Connection conn = DAO.getConnection();
+		List<SellItem> sellItemList = new ArrayList<>();
+
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT ");
+		sql.append("  i.id, ");
+		sql.append("  i.preco, ");
+		sql.append("  i.quantity, ");
+		sql.append("  i.id_filme ");
+		sql.append("FROM  ");
+		sql.append(" item_venda i ");
+		sql.append("WHERE  ");
+		sql.append(" i.id_venda = ? ");
+
+		PreparedStatement stat = null;
+		try {
+
+			stat = conn.prepareStatement(sql.toString());
+			stat.setInt(1, sell.getId());
+
+			ResultSet rs = stat.executeQuery();
+
+			while (rs.next()) {
+				SellItem sellItem = new SellItem();
+				sellItem.setId(rs.getInt("id"));
+				sellItem.setPrice(rs.getDouble("preco"));
+				sellItem.setQuantity(rs.getInt("quantity"));
+				MovieDAO dao = new MovieDAO();
+				sellItem.setMovie(dao.getOne(new Movie(rs.getInt("id_filme"))));
+
+				sellItemList.add(sellItem);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			exception = new Exception("Erro ao executar um sql em Item de venda");
+		} finally {
+			try {
+				if (!stat.isClosed())
+					stat.close();
+			} catch (SQLException e) {
+				System.out.println("Erro ao fechar o Statement");
+				e.printStackTrace();
+			}
+
+			try {
+				if (!conn.isClosed())
+					conn.close();
+			} catch (SQLException e) {
+				System.out.println("Erro a o fechar a conexao com o banco.");
+				e.printStackTrace();
+			}
+		}
+
+		if (exception != null)
+			throw exception;
+		
+		return sellItemList;
 	}
 
 	@Override
@@ -231,6 +294,7 @@ public class VendaDAO implements DAO<Sell>{
 				sell.setUser(ud.getOne(new User(rs.getInt("id_usuario"))));
 				sell.setDate(sellDate==null?null:sellDate.toLocalDateTime());
 				sell.setTotal(rs.getDouble("total"));
+				sell.setMovies(getAllSellItem(sell));
 			}
 
 		} catch (SQLException e) {

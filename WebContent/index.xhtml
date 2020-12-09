@@ -12,13 +12,15 @@
 			<h:messages id="messages" styleClass="warns mt-3" infoClass="alert alert-success" errorClass="alert alert-danger"/>
 			<h:form class="input-group mb-3">
 			  <div class="input-group-prepend">
-			    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Título</button>
-			    <div class="dropdown-menu">
-			      <a class="dropdown-item" href="#">Título</a>
-			      <a class="dropdown-item" href="#">Ano</a>
-			    </div>
+			    <h:selectOneMenu class="form-control" id="searchFilter" value="#{movieSearchController.filter}">
+			    	<f:ajax execute="@this" render="@all" event="change"/>
+				    <f:selectItem itemValue="1" itemLabel="Título"/>
+				    <f:selectItem itemValue="2" itemLabel="Ano"/>
+				    <f:selectItem itemValue="3" itemLabel="Tags"/>
+			    </h:selectOneMenu>
 			  </div>
 			  <h:inputText
+			  	pt:type="#{movieSearchController.inputType}"
 			  	pt:class="form-control"
 			  	pt:placeholder="Digite o nome do filme"
 			  	pt:aria-label="Digite o nome do filme"

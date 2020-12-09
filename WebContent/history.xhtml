@@ -15,7 +15,9 @@ xmlns:ui="http://java.sun.com/jsf/facelets">
 			  <a href="/LocadoraCzar/faces/sellDetails.xhtml?id=#{s.id}" class="list-group-item list-group-item-action" pt:tabindex="-1" pt:aria-disabled="true">
 			  	<div class="d-flex w-100 justify-content-between">
 			      <h5 class="mb-1">Código da venda: #{s.id}</h5>
-			      <small>R$#{s.total}</small>
+			      <small><h:outputText value="#{s.total}">
+					<f:convertNumber locale="pt_BR" currencySymbol="R$" type="currency"/>
+				</h:outputText></small>
 			    </div>
 			    <p class="mb-1"><h:outputText value="#{s.date}">
 		    		<f:convertDateTime pattern="dd/MM/yyyy" type="localDateTime"/>

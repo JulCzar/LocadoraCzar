@@ -21,7 +21,7 @@ public class User {
 	private String password;
 	
 	public User() {
-		
+		this.privilege = Privilege.USER;
 	}
 	
 	public User(Integer id) {

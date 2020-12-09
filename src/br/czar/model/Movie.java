@@ -15,9 +15,10 @@ public class Movie {
 	private Double price;
 	private Integer stock;
 	private Parental rate;
+	private Tags tags;
 	
 	public Movie() {
-		
+		this.stock = 0;
 	}	
 	public Movie(Integer id) {
 		this.id = id;
@@ -71,6 +72,18 @@ public class Movie {
 	public void setRate(Parental rate) {
 		this.rate = rate;
 	}
+	public String getTags() {
+		if (tags == null)
+			tags = new Tags();
+		
+		return tags.stringify();
+	}
+	public void setTags(String tags) {
+		this.tags = new Tags(tags);
+	}
+	public void setTags(Tags tags) {
+		this.tags = tags;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -98,6 +111,7 @@ public class Movie {
 	public String toString() {
 		return "Movie = {\n\tid: " + id + ",\n\ttitle: " + title + ",\n\tsinopse: " + sinopse + ",\n\trelease: "
 				+ release + ",\n\timage: " + image + ",\n\tprice: " + price + ",\n\tstock: " + stock + ",\n\trate: "
-				+ rate + "\n}";
-	}	
+				+ rate + ",\n\ttags: " + tags + "\n}";
+	}
+	
 }

@@ -33,6 +33,12 @@ public class MovieController extends Controller<Movie> implements Serializable {
 		}
 	}
 	
+	@Override
+	public void delete() {
+		super.delete();
+		Utils.redirect("../index.xhtml");
+	}
+	
 	public void registerMovie() {
 		try {
 			dao.insert(entity);

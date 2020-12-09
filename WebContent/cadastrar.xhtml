@@ -48,9 +48,23 @@
 					</div>
 					<h:inputText id="email" pt:placeholder="email@example.com"
 						pt:type="email" value="#{userController.entity.email}"
-						class="form-control" />
+						class="form-control" >
+						<f:ajax execute="@this" event="blur" listener="#{userController.verifyEmail}" render="messages"/>
+					</h:inputText>
 				</div>
 			</div>
+		  <div class="form-group" jsf:rendered="#{sessionController.isLoggedUserAdmin()}">
+		    <label for="accessLevel">Nível de Acesso</label>
+			<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text"> <i class="fas fa-stamp"></i>
+						</span>
+					</div>
+			    <h:selectOneMenu class="form-control" pt:id="accessLevel" value="#{userController.entity.privilege}">
+		    		<f:selectItems value="#{userController.privileges}" var="p" itemLabel="#{p.label}"/>
+			    </h:selectOneMenu>
+	    	</div>
+		  </div>
 			<div class="form-group">
 				<label for="password">Senha</label>
 				<div class="input-group mb-3">

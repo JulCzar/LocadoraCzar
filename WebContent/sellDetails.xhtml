@@ -10,15 +10,33 @@
 	<ui:define name="content">
 		<h:form class="container mt-4 bg-white rounded" style="flex-direction: column">
 			<div class="jumbotron bg-white">
-			  	<h1 class="display-4">#{sellDetailsController.sellDetails.id}</h1>
-				<h:commandButton pt:class="btn btn-primary"
-				  	value="editar"
-				  	actionListener="#{userDetailsController.edit}">
-				  	<f:ajax execute="editForm" render="@this"/>
-				</h:commandButton>
-				<h:commandButton pt:class="btn btn-primary ml-1"
-				  	value="Ver Histórico de compras"
-				  	action="history.xhtml?faces-redirect=true"/>
+			  	<h2 class="display-4">Número do pedido: #{sellDetailsController.sellDetails.id}</h2>
+			  	<hr/>
+			  	<div>Usuário: #{sellDetailsController.sellDetails.user.name}</div>
+			  	<div>Realizada em <h:outputText value="#{sellDetailsController.sellDetails.date}">
+		  			<f:convertDateTime type="localDateTime" pattern="dd/MM/yyy - HH:mm "/>
+		  		</h:outputText></div>
+		  		<hr/>
+		  		<div>Filmes Comprados</div>
+				<h:dataTable var="i" value="#{sellDetailsController.sellDetails.movies}" styleClass="table">
+				  	<h:column>
+				  		<f:facet name="header">Título</f:facet>
+				  		<h:outputLabel value="#{i.movie.title}"/>
+				  	</h:column>
+				  	<h:column>
+				  		<f:facet name="header">Quantidade</f:facet>
+				  		<h:outputLabel value="#{i.quantity}"/>
+				  	</h:column>
+				  	<h:column>
+				  		<f:facet name="header">Valor</f:facet>
+				  		<h:outputLabel value="#{i.price}"/>
+				  	</h:column>
+				  	<h:column>
+				  		<f:facet name="header">Total</f:facet>
+				  		<h:outputLabel value="#{i.totalPrice}"/>
+				  	</h:column>
+				</h:dataTable>
+			  	<div>Total #{sellDetailsController.sellDetails.total}</div>
 			</div>
 		</h:form>
 	</ui:define>

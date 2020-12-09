@@ -23,6 +23,10 @@ public class Cart {
 	public void setItems(List<SellItem> items) {
 		this.items = items;
 	}
+	
+	public void remove(SellItem s) {
+		items.remove(s);
+	}
 	@Override
 	public String toString() {
 		return "Cart = {\n\titems: " + items + "\n}";

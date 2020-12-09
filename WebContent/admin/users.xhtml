@@ -8,33 +8,37 @@ xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
 xmlns:ui="http://java.sun.com/jsf/facelets">
 <ui:composition template="/resources/templates/body.xhtml">
 	<ui:define name="content">
-		<div class="bg-white container mt-4 p-4 rounded">
+		<div class="bg-white container mt-4 p-4 rounded ">
 			<h:messages id="messages" styleClass="warns mt-3" infoClass="alert alert-success" errorClass="alert alert-danger"/>
 			<h:form class="input-group mb-3">
 			  <div class="input-group-prepend">
-			    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Nome</button>
-			    <div class="dropdown-menu">
-			      <a class="dropdown-item" href="#">Nome</a>
-			      <a class="dropdown-item" href="#">Email</a>
-			      <a class="dropdown-item" href="#">CPF</a>
-			    </div>
+			    <h:selectOneMenu class="form-control" id="searchFilter" value="#{userController.filter}">
+			    	<f:ajax execute="@this" render="@form" event="change"/>
+				    <f:selectItem itemValue="1" itemLabel="Nome"/>
+				    <f:selectItem itemValue="2" itemLabel="Email"/>
+				    <f:selectItem itemValue="3" itemLabel="CPF"/>
+			    </h:selectOneMenu>
 			  </div>
 			  <h:inputText
-			  	pt:class="form-control"
+			  	pt:class="form-control #{userController.getInputId()}"
 			  	pt:placeholder="Digite o nome do usuário"
 			  	pt:aria-label="Digite o nome do usuário"
 			  	pt:aria-describedby="button-addon2"
-			  	value="#{userController.search}">
+			  	value="#{userController.query}"
+			  	onkeydown="applyCpfMask()">
 				<f:ajax event="keyup"
-					listener="#{userController.searchByName}"
+					listener="#{userController.search}"
 					execute="@this"
 					render="filmsList messages"/>
 			  </h:inputText>
 			  <div class="input-group-append">
-			    <h:commandButton class="btn btn-outline-secondary" pt:id="button-addon2" actionListener="#{userController.searchByName}" value="Buscar">
-			    	<f:ajax event="click" listener="#{userController.searchByTitle}" execute="@this" render="filmsList messages"/>
+			    <h:commandButton class="btn btn-outline-secondary" pt:id="button-addon2" actionListener="#{userController.search}" value="Buscar">
+			    	<f:ajax event="click" listener="#{userController.search}" execute="@this" render="filmsList messages"/>
 			    </h:commandButton>
 			  </div>
+			</h:form>
+			<h:form class="d-flex justify-content-end mb-3">
+				<a jsf:action="#{redirect.to('cadastrar.xhtml')}" class="btn btn-outline-success">Cadastrar novo</a>
 			</h:form>
 			<h:form id="filmsList">
 				<ul class="list-group">
@@ -55,6 +59,7 @@ xmlns:ui="http://java.sun.com/jsf/facelets">
 				</ul>
 			</h:form>
 		</div>
+	<h:outputScript library="scripts" name="validateCpf.js"/>
 	</ui:define>
 </ui:composition>
 </html>

@@ -17,29 +17,43 @@ import br.czar.util.Utils;
 public class UserController extends Controller<User> implements Serializable {
 
 	private static final long serialVersionUID = 3965057035659275669L;
-	private String search;
+	private String filter = "1";
+	private String query;
 	
 	public UserController() {
 		super(new UserDAO());
-		getEntity().setPrivilege(Privilege.USER);
 		Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
 		flash.keep("userInfo");
 		setEntity((User)flash.get("userInfo"));
 	}
 	
-	public void searchByName() {
-		setEntityList(null);
+	public void search() {
 		try {
-			setEntityList(dao.search(getSearch(), "name"));
+			setEntityList(dao.search(getQuery(), filter));
 		} catch (Exception e) {
 			Utils.addErrorMessage("Não foi possível buscar o filme no momento, tente mais tarde!");
 			e.printStackTrace();
 		}
 	}
 	
-	@Override
-	public void update() {
-		super.update();
+	public void verifyEmail() {
+		UserDAO dao = (UserDAO)this.dao;
+		try {
+			if (dao.getOne(getEntity().getEmail()))
+				Utils.addErrorMessage("Email já cadastrado no sistema!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void updatePassword() {
+		String email = getEntity().getEmail();
+		String password = getEntity().getPassword();
+		String passwordB64 = Utils.base64Parse(password);
+		getEntity().setPassword(Utils.hashParse(email+password+passwordB64));
+		
+		update();
 	}
 	
 	@Override
@@ -50,12 +64,29 @@ public class UserController extends Controller<User> implements Serializable {
 		return this.entity;
 	}
 	
-	public String getSearch() {
-		return search;
+	public String getQuery() {
+		return query;
 	}
 	
-	public void setSearch(String search) {
-		this.search = search;
+	public void setQuery(String search) {
+		this.query = search;
+	}
+	
+	public Privilege[] getPrivileges() {
+		return Privilege.values();
 	}
 
+	public String getFilter() {
+		return filter;
+	}
+
+	public void setFilter(String filter) {
+		this.filter = filter;
+	}
+	public String getInputId() {
+		if (filter.equals("3"))
+			return "cpfInput";
+		else
+			return "userInput";
+	}
 }

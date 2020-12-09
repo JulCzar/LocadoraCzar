@@ -31,7 +31,7 @@ public class SellDetailsController implements Serializable {
 			e.printStackTrace();
 			sell = null;
 		}
-	
+		
 		return sell;
 	}
 }

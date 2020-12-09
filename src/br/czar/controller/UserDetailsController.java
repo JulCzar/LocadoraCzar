@@ -53,7 +53,13 @@ public class UserDetailsController implements Serializable {
 		
 		return user;
 	}
-
+	
+	public void getUserHistory() {
+		Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
+		flash.put("userHistory", user);
+		Utils.redirect("history.xhtml");
+	}
+	
 	public User getUser() {
 		if (this.user == null)
 			setUser(getUserDetails());

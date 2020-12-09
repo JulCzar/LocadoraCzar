@@ -20,24 +20,38 @@
 		  	<div class="form-row">
 			    <div class="form-group col-md-5">
 			      <label for="title">Título</label>
-			      <h:inputText class="form-control" id="title" value="#{movieController.entity.title}"/>
+			      <h:inputText class="form-control" pt:id="title" value="#{movieController.entity.title}"/>
 			    </div>
 			    <div class="form-group col-md-4">
 			      <label for="release">Lançamento</label>
-			      <h:inputText pt:type="date" class="form-control" id="release" value="#{movieController.entity.release}">
+			      <h:inputText pt:type="date" class="form-control" pt:id="release" value="#{movieController.entity.release}">
 					<f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
 			      </h:inputText>
 			    </div>
 			    <div class="form-group col-md-3">
 			      <label for="parental">Classificação</label>
-			      <h:selectOneMenu class="form-control" id="parental" value="#{movieController.entity.rate}">
+			      <h:selectOneMenu class="form-control" pt:id="parental" value="#{movieController.entity.rate}">
 			      	<f:selectItems value="#{movieController.parentals}" var="p" itemLabel="#{p.label}" />
 			      </h:selectOneMenu>
 			    </div>
 		  	</div>
+		  	<div class="form-row">
+			    <div class="form-group col-md-6">
+			      <label for="price">Preço</label>
+			      <h:inputText pt:type="number" pt:min="0" class="form-control" pt:id="price" value="#{movieController.entity.price}"/>
+			    </div>
+			    <div class="form-group col-md-6">
+			      <label for="stock">Estoque</label>
+			      <h:inputText pt:type="number" pt:step="1" pt:min="0" class="form-control" pt:id="stock" value="#{movieController.entity.stock}"/>
+			    </div>
+		  	</div>
 			<div class="form-group">
 			    <label for="sinopse">Sinopse</label>
-			    <textarea class="form-control" id="sinopse" rows="3" jsf:value="#{movieController.entity.sinopse}"></textarea>
+			    <textarea class="form-control" pt:id="sinopse" rows="3" jsf:value="#{movieController.entity.sinopse}"></textarea>
+			</div>
+			<div class="form-group">
+			    <label for="tags">Tags <small>(separe por ponto e virgula ";")</small></label>
+			    <h:inputText class="form-control" pt:id="tags" value="#{movieController.entity.tags}"></h:inputText>
 			</div>
 			<div class="form-group">
 			    <label for="imageURL">URL da capa</label>

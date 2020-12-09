@@ -24,7 +24,7 @@
 				</h:commandButton>
 				<h:commandButton pt:class="btn btn-primary ml-1"
 				  	value="Ver Histórico de compras"
-				  	action="history.xhtml?faces-redirect=true"/>
+				  	actionListener="#{userDetailsController.getUserHistory}"/>
 			</div>
 		</h:form>
 	</ui:define>

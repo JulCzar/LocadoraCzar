@@ -1,9 +1,12 @@
 package br.czar.model;
 
 public class SellItem {
+	private Integer id;
 	private Movie movie;
 	private Integer quantity;
 	private Double price;
+	
+	public SellItem() {}
 	
 	public SellItem(Movie movie) {
 		this.movie = movie;
@@ -11,6 +14,14 @@ public class SellItem {
 		this.quantity = 1;
 	}
 	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public Movie getMovie() {
 		return movie;
 	}
@@ -20,11 +31,16 @@ public class SellItem {
 	public Integer getQuantity() {
 		return quantity;
 	}
-	public void increaseQuantity() {
-		quantity += 1;
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
-	public void decreaseQuantity() {
-		quantity -= 1;
+	public void increaseQuantity() {
+		if (quantity + 1 <= movie.getStock())
+			quantity += 1;
+	}
+	public void decreaseQuantity() {			
+		if (quantity - 1 > 0)
+			quantity -= 1;
 	}
 	public Double getPrice() {
 		return price;
@@ -58,9 +74,10 @@ public class SellItem {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
-		return "SellItem = {\n\tmovie: " + movie + ",\n\tprice: " + price + "\n}";
+		return "SellItem = {\n\tid: " + id + ",\n\tmovie: " + movie + ",\n\tquantity: " + quantity + ",\n\tprice: "
+				+ price + "\n}";
 	}
-	
 }

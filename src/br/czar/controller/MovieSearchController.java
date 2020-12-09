@@ -56,4 +56,11 @@ public class MovieSearchController implements Serializable {
 		this.movieList = listaMidia;
 	}
 	
+	public String getInputType() {
+		if (filter.equals("2"))
+			return "number";
+		
+		return "text";
+	}
+	
 }

@@ -7,6 +7,7 @@ import javax.inject.Named;
 
 import br.czar.model.User;
 import br.czar.util.SessionStorage;
+import br.czar.util.Utils;
 
 @Named
 @ViewScoped
@@ -15,7 +16,8 @@ public class TemplateController implements Serializable {
 	private static final long serialVersionUID = -5646848465487484984L;
 	
 	public void logout() {
-		sessionStorage.clear();
+		sessionStorage.setItem("userData", null);;
+		Utils.redirect("index.xhtml");
 	}
 	
 	public User getUser() {

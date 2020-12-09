@@ -54,7 +54,7 @@ public class FilmDetailsController implements Serializable {
 		
 		Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
 		flash.put("movieInfo", getMovie());
-		Utils.redirect("editFilm.xhtml");
+		Utils.redirect("admin/editFilm.xhtml");
 	}
 
 	public Movie getMovieDetails() {

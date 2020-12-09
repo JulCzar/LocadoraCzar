@@ -13,13 +13,13 @@ xmlns:ui="http://java.sun.com/jsf/facelets">
 		class="container-fluid d-flex align-items-center justify-content-center bg-dark"
 		style="height: 100vh; flex-direction: column">
 		<h:form class="form-signin bg-white p-5 rounded">
-			<h1 class="text-center mb-4">Editar Perfil</h1>
+			<h1 class="text-center mb-4">Alterar Dados do cadastro</h1>
 			<h:messages id="messages" styleClass="warns"
 				infoClass="alert alert-success" errorClass="alert alert-danger" />
 			<div class="form-row">
 				<div class="form-group col">
 					<label for="name">Nome</label>
-					<div class="input-group mb-3">
+					<div class="input-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"> <i class="fas fa-user-alt"></i>
 							</span>
@@ -30,7 +30,7 @@ xmlns:ui="http://java.sun.com/jsf/facelets">
 				</div>
 				<div class="form-group col">
 					<label for="lastname">Sobrenome</label>
-					<div class="input-group mb-3">
+					<div class="input-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"> <i class="fas fa-user-alt"></i>
 							</span>
@@ -52,18 +52,18 @@ xmlns:ui="http://java.sun.com/jsf/facelets">
 						class="form-control" />
 				</div>
 			</div>
-			<div class="form-group">
-				<label for="password">Senha</label>
-				<div class="input-group mb-3">
+		  <div class="form-group" jsf:rendered="#{sessionController.isLoggedUserAdmin()}">
+		    <label for="accessLevel">Nível de Acesso</label>
+			<div class="input-group mb-3">
 					<div class="input-group-prepend">
-						<span class="input-group-text"> <i class="fas fa-key"></i>
+						<span class="input-group-text"> <i class="fas fa-stamp"></i>
 						</span>
 					</div>
-					<h:inputText id="password" pt:placeholder="********"
-						pt:type="password" value="#{userController.entity.password}"
-						class="form-control" />
-				</div>
-			</div>
+			    <h:selectOneMenu class="form-control" pt:id="accessLevel" value="#{userController.entity.privilege}">
+		    		<f:selectItems value="#{userController.privileges}" var="p" itemLabel="#{p.label}"/>
+			    </h:selectOneMenu>
+	    	</div>
+		  </div>
 			<div class="form-row">
 				<div class="form-group col-md-7">
 					<label for="cpf">CPF</label>
@@ -93,13 +93,13 @@ xmlns:ui="http://java.sun.com/jsf/facelets">
 					</div>
 				</div>
 			</div>
-			<h:commandButton class="btn btn-primary" value="Salvar Alterações"
-				actionListener="#{userController.update()}">
+			<h:commandButton class="btn btn-primary mr-3" value="Alterar Senha"
+				actionListener="#{redirect.to('changePassword.xhtml')}">
 				<f:ajax execute="@form" render="@form messages" />
 			</h:commandButton>
-			<h:commandButton class="btn ml-2 btn-primary" value="Excluir perfil"
-				actionListener="#{userController.delete()}">
-				<f:ajax execute="@this" render="@form messages" />
+			<h:commandButton class="btn btn-primary" value="Salvar"
+				actionListener="#{userController.update()}">
+				<f:ajax execute="@form" render="@form messages" />
 			</h:commandButton>
 		</h:form>
 	</div>

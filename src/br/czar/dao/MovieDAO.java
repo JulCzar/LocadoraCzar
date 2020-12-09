@@ -11,6 +11,7 @@ import java.util.List;
 
 import br.czar.model.Movie;
 import br.czar.model.Parental;
+import br.czar.model.Tags;
 import br.czar.util.Utils;
 
 public class MovieDAO implements DAO<Movie> {
@@ -23,9 +24,9 @@ public class MovieDAO implements DAO<Movie> {
 		StringBuffer sql = new StringBuffer();
 		sql.append("INSERT INTO ");
 		sql.append("filmes ");
-		sql.append("  (title, sinopse, release, rate, image) ");
+		sql.append("  (title, sinopse, release, rate, image, tags, price, stock) ");
 		sql.append("VALUES ");
-		sql.append("  ( ?, ?, ?, ?, ?) ");
+		sql.append("  ( ?, ?, ?, ?, ?, ?, ?, ?) ");
 		PreparedStatement stat = null;
 
 		try {
@@ -36,6 +37,9 @@ public class MovieDAO implements DAO<Movie> {
 			stat.setDate(3, (birthdate == null)?null:Date.valueOf(birthdate));
 			stat.setInt(4, obj.getRate().getId());
 			stat.setString(5, obj.getImage());
+			stat.setString(6, obj.getTags());
+			stat.setDouble(7, obj.getPrice());
+			stat.setInt(8, obj.getStock());
 
 			stat.execute();
 
@@ -87,21 +91,27 @@ public class MovieDAO implements DAO<Movie> {
 		sql.append("  sinopse = ?, ");
 		sql.append("  release = ?, ");
 		sql.append("  rate = ?, ");
-		sql.append("  image = ? ");
+		sql.append("  image = ?, ");
+		sql.append("  tags = ?, ");
+		sql.append("  price = ?, ");
+		sql.append("  stock = ? ");
 		sql.append("WHERE ");
 		sql.append("  id = ? ");
 
 		PreparedStatement stat = null;
 
 		try {
-			LocalDate birthdate = obj.getRelease();
+			LocalDate release = obj.getRelease();
 			stat = conn.prepareStatement(sql.toString());
 			stat.setString(1, obj.getTitle());
 			stat.setString(2, obj.getSinopse());
-			stat.setDate(3, (birthdate == null)?null:Date.valueOf(birthdate));
+			stat.setDate(3, (release == null)?null:Date.valueOf(release));
 			stat.setInt(4, obj.getRate().getId());
 			stat.setString(5, obj.getImage());
-			stat.setInt(6, obj.getId());
+			stat.setString(6, obj.getTags());
+			stat.setDouble(7, obj.getPrice());
+			stat.setInt(8, obj.getStock());
+			stat.setInt(9, obj.getId());
 
 			stat.execute();
 
@@ -209,9 +219,12 @@ public class MovieDAO implements DAO<Movie> {
 		sql.append("  f.rate, ");
 		sql.append("  f.price, ");
 		sql.append("  f.stock, ");
+		sql.append("  f.tags, ");
 		sql.append("  f.image ");
 		sql.append("FROM  ");
 		sql.append("  filmes f ");
+		sql.append("WHERE  ");
+		sql.append("  f.stock > 0 ");
 		sql.append("ORDER BY f.title ");
 
 		PreparedStatement stat = null;
@@ -229,6 +242,7 @@ public class MovieDAO implements DAO<Movie> {
 				movie.setSinopse(rs.getString("sinopse"));
 				movie.setPrice(rs.getDouble("price"));
 				movie.setStock(rs.getInt("stock"));
+				movie.setTags(new Tags(rs.getString("tags")));
 				movie.setRelease(release == null ? null : release.toLocalDate());
 				movie.setRate(Parental.valueOf(rs.getInt("rate")));
 				movie.setImage(rs.getString("image"));
@@ -280,6 +294,7 @@ public class MovieDAO implements DAO<Movie> {
 		sql.append("  f.rate, ");
 		sql.append("  f.price, ");
 		sql.append("  f.stock, ");
+		sql.append("  f.tags, ");
 		sql.append("  f.image ");
 		sql.append("FROM  ");
 		sql.append("  filmes f ");
@@ -300,6 +315,7 @@ public class MovieDAO implements DAO<Movie> {
 				movie.setPrice(rs.getDouble("price"));
 				movie.setStock(rs.getInt("stock"));
 				movie.setSinopse(rs.getString("sinopse"));
+				movie.setTags(new Tags(rs.getString("tags")));
 				movie.setRelease(release == null ? null : release.toLocalDate());
 				movie.setRate(Parental.valueOf(rs.getInt("rate")));
 				movie.setImage(rs.getString("image"));
@@ -334,6 +350,20 @@ public class MovieDAO implements DAO<Movie> {
 	}
 	
 	public List<Movie> search(String q, String f) throws Exception {
+		switch (f) {
+			case "1":
+				return searchName(q);
+			case "2":
+				return searchDate(q);
+			case "3":
+				return searchTags(q);
+			default:
+				throw new Exception("Parâmetro de filtro inválido!");
+		}
+			
+	}
+	
+	private List<Movie> searchName(String q) throws Exception {
 		Exception exception = null;
 		Connection conn = DAO.getConnection();
 		List<Movie> movieList = new ArrayList<>();
@@ -346,12 +376,13 @@ public class MovieDAO implements DAO<Movie> {
 		sql.append("  f.release, ");
 		sql.append("  f.rate, ");
 		sql.append("  f.price, ");
+		sql.append("  f.tags, ");
 		sql.append("  f.stock, ");
 		sql.append("  f.image ");
 		sql.append("FROM  ");
 		sql.append("  filmes f ");
-		sql.append("Where  ");
-		sql.append("  UPPER(f.title) LIKE ?");
+		sql.append("WHERE  ");
+		sql.append("  UPPER(f.title) LIKE ? ");
 		sql.append("ORDER BY f.title ");
 
 		PreparedStatement stat = null;
@@ -359,6 +390,154 @@ public class MovieDAO implements DAO<Movie> {
 
 			stat = conn.prepareStatement(sql.toString());
 			stat.setString(1, "%" + q.toUpperCase() + "%");
+			
+			ResultSet rs = stat.executeQuery();
+
+			while (rs.next()) {
+				Movie movie = new Movie();
+				Date release = rs.getDate("release");
+				movie.setId(rs.getInt("id"));
+				movie.setTitle(rs.getString("title"));
+				movie.setSinopse(rs.getString("sinopse"));
+				movie.setPrice(rs.getDouble("price"));
+				movie.setTags(new Tags(rs.getString("tags")));
+				movie.setStock(rs.getInt("stock"));
+				movie.setRelease(release == null ? null : release.toLocalDate());
+				movie.setRate(Parental.valueOf(rs.getInt("rate")));
+				movie.setImage(rs.getString("image"));
+
+				movieList.add(movie);
+			}
+
+		} catch (SQLException e) {
+			Utils.addErrorMessage("Não foi possivel buscar os dados do filme.");
+			e.printStackTrace();
+			exception = new Exception("Erro ao executar um SQL em MovieDAO.");
+		} finally {
+			try {
+				if (!stat.isClosed())
+					stat.close();
+			} catch (SQLException e) {
+				System.out.println("Erro ao fechar o Statement");
+				e.printStackTrace();
+			}
+
+			try {
+				if (!conn.isClosed())
+					conn.close();
+			} catch (SQLException e) {
+				System.out.println("Erro a o fechar a conexao com o banco.");
+				e.printStackTrace();
+			}
+		}
+
+		if (exception != null)
+			throw exception;
+
+		return movieList;
+	}
+	
+	private List<Movie> searchTags(String q) throws Exception {
+		Exception exception = null;
+		Connection conn = DAO.getConnection();
+		List<Movie> movieList = new ArrayList<>();
+
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT ");
+		sql.append("  f.id, ");
+		sql.append("  f.title, ");
+		sql.append("  f.sinopse, ");
+		sql.append("  f.release, ");
+		sql.append("  f.rate, ");
+		sql.append("  f.price, ");
+		sql.append("  f.tags, ");
+		sql.append("  f.stock, ");
+		sql.append("  f.image ");
+		sql.append("FROM  ");
+		sql.append("  filmes f ");
+		sql.append("WHERE  ");
+		sql.append("  UPPER(f.tags) LIKE ? ");
+		sql.append("ORDER BY f.title ");
+
+		PreparedStatement stat = null;
+		try {
+
+			stat = conn.prepareStatement(sql.toString());
+			stat.setString(1, "%" + q.toUpperCase() + "%");
+			
+			ResultSet rs = stat.executeQuery();
+
+			while (rs.next()) {
+				Movie movie = new Movie();
+				Date release = rs.getDate("release");
+				movie.setId(rs.getInt("id"));
+				movie.setTitle(rs.getString("title"));
+				movie.setSinopse(rs.getString("sinopse"));
+				movie.setPrice(rs.getDouble("price"));
+				movie.setTags(new Tags(rs.getString("tags")));
+				movie.setStock(rs.getInt("stock"));
+				movie.setRelease(release == null ? null : release.toLocalDate());
+				movie.setRate(Parental.valueOf(rs.getInt("rate")));
+				movie.setImage(rs.getString("image"));
+
+				movieList.add(movie);
+			}
+
+		} catch (SQLException e) {
+			Utils.addErrorMessage("Não foi possivel buscar os dados do filme.");
+			e.printStackTrace();
+			exception = new Exception("Erro ao executar um SQL em MovieDAO.");
+		} finally {
+			try {
+				if (!stat.isClosed())
+					stat.close();
+			} catch (SQLException e) {
+				System.out.println("Erro ao fechar o Statement");
+				e.printStackTrace();
+			}
+
+			try {
+				if (!conn.isClosed())
+					conn.close();
+			} catch (SQLException e) {
+				System.out.println("Erro a o fechar a conexao com o banco.");
+				e.printStackTrace();
+			}
+		}
+
+		if (exception != null)
+			throw exception;
+
+		return movieList;
+	}
+	
+	private List<Movie> searchDate(String q) throws Exception {
+		Exception exception = null;
+		Connection conn = DAO.getConnection();
+		List<Movie> movieList = new ArrayList<>();
+
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT ");
+		sql.append("  f.id, ");
+		sql.append("  f.title, ");
+		sql.append("  f.sinopse, ");
+		sql.append("  f.release, ");
+		sql.append("  f.rate, ");
+		sql.append("  f.price, ");
+		sql.append("  f.tags, ");
+		sql.append("  f.stock, ");
+		sql.append("  f.image ");
+		sql.append("FROM  ");
+		sql.append("  filmes f ");
+		sql.append("WHERE  ");
+		sql.append("  EXTRACT(YEAR FROM f.release) = ? ");
+		sql.append("ORDER BY f.title ");
+
+		PreparedStatement stat = null;
+		try {
+
+			stat = conn.prepareStatement(sql.toString());
+			stat.setInt(1, Integer.valueOf(q));
 
 			ResultSet rs = stat.executeQuery();
 
@@ -369,6 +548,7 @@ public class MovieDAO implements DAO<Movie> {
 				movie.setTitle(rs.getString("title"));
 				movie.setSinopse(rs.getString("sinopse"));
 				movie.setPrice(rs.getDouble("price"));
+				movie.setTags(new Tags(rs.getString("tags")));
 				movie.setStock(rs.getInt("stock"));
 				movie.setRelease(release == null ? null : release.toLocalDate());
 				movie.setRate(Parental.valueOf(rs.getInt("rate")));

@@ -47,8 +47,8 @@ public class CartController {
 			Utils.addInfoMessage("Venda realizada com sucesso.");
 			
 			sessionStorage.setItem("cart", null);
-			setSell(null);
 			
+			setSell(null);
 		} catch (Exception e) {
 			Utils.addErrorMessage("Não é possivel fazer uma inclusão.");
 			e.printStackTrace();

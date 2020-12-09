@@ -15,24 +15,32 @@
 			  	<img class="rounded" src="#{filmDetailsController.movie.image}" height="250" alt=""/>
 			    <div class="ml-4">
 				  	<h1 class="display-4">#{filmDetailsController.movie.title}</h1>
+				  	<small>#{filmDetailsController.movie.tags}</small>
 				    <p class="lead text-justify">#{filmDetailsController.movie.sinopse}</p>
 			    </div>
 			  </div>
 			  <hr class="my-4"/>
+			  <div>Preço: <h:outputText value="#{filmDetailsController.movie.price}">
+				<f:convertNumber locale="pt_BR" currencySymbol="R$" type="currency"/>
+			  </h:outputText></div>
 			  <small>Classificação: #{filmDetailsController.movie.rate.label}</small>
 			  <p>Lançamento: <h:outputText value="#{filmDetailsController.movie.release}">
 			  	<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
 			  </h:outputText></p>
-			  <h:commandButton pt:class="btn btn-primary"
+			  <div jsf:rendered="#{filmDetailsController.movie.stock > 0}">Quantidade em estoque: <h:outputText value="#{filmDetailsController.movie.stock}"/></div>
+			  <h:commandButton pt:class="btn mr-1 btn-primary"
 			  	value="editar"
-			  	actionListener="#{filmDetailsController.edit}">
-			  	<f:ajax execute="editForm" render="@this"/>
+			  	actionListener="#{filmDetailsController.edit}"
+			  	rendered="#{sessionController.isLoggedUserAdmin()}">
+			  	<f:ajax execute="@this" render="@this"/>
 			  </h:commandButton>
-			  <h:commandButton pt:class="btn ml-1 btn-primary"
+			  <h:commandButton pt:class="btn btn-primary"
 			  	value="Adicionar ao carrinho"
-			  	actionListener="#{filmDetailsController.addToCart()}">
+			  	actionListener="#{filmDetailsController.addToCart()}"
+			  	rendered="#{filmDetailsController.movie.stock > 0}">
 			  	<f:ajax execute="editForm" render="messages"/>
 			  </h:commandButton>
+			  <button jsf:rendered="#{filmDetailsController.movie.stock == 0}" class="btn btn-secondary" pt:disabled="true">Produto sem Estoque</button>
 			</div>
 		</h:form>
 	</ui:define>

@@ -14,22 +14,33 @@ xmlns:ui="http://java.sun.com/jsf/facelets">
 			<h:messages id="messages" styleClass="warns mt-3" infoClass="alert alert-success" errorClass="alert alert-danger"/>
 			<h:form id="filmsList">
 				<ul class="list-group">
-				<ui:repeat id="carrinho" var="item" value="#{cartController.cart.items}">
-  					<a href="/LocadoraCzar/faces/filme.xhtml?id=#{item.movie.id}" class="list-group-item list-group-item-action">
-					    <div class="d-flex w-100 justify-content-between">
-					      <h5 class="mb-1">#{item.movie.title}</h5>
-					      <small>
-					      	<h:outputText value="R$ #{item.totalPrice}"/>
-					      </small>
-					    </div>
-					    <p class="mb-1">Quantidade: #{item.quantity}</p>
-				  	</a>
+				<ui:repeat var="item" value="#{cartController.cart.items}">
+  					<div class="list-group-item d-flex">
+	  					<a class="list-group-item-action" href="/LocadoraCzar/faces/filme.xhtml?id=#{item.movie.id}">
+						    <div class="d-flex w-100 justify-content-between">
+						      <h5 class="mb-1">#{item.movie.title}</h5>
+						      <small>
+						      	<h:outputText value="R$ #{item.totalPrice}"/>
+						      </small>
+						    </div>
+						    <p class="mb-1">Quantidade: #{item.quantity}</p>
+					  	</a>
+					  	<a class="mx-1" jsf:action="#{item.decreaseQuantity()}">
+					  		<f:ajax execute="@this" render="@all"/>
+					  		<i class="fas fa-minus"></i></a>
+					  	<a class="mx-1" jsf:action="#{item.increaseQuantity()}">
+					  		<f:ajax execute="@this" render="@all"/>
+					  		<i class="fas fa-plus"></i></a>
+					  	<a class="ml-1" jsf:action="#{cartController.cart.remove(item)}">
+					  		<f:ajax execute="@this" render="@all"/>
+					  		<i class="fas fa-trash-alt"></i></a>
+  					</div>
 				</ui:repeat>
 				</ul>
 				<hr jsf:rendered="#{cartController.cart.items.size() != 0}"/>
 				<div jsf:rendered="#{cartController.cart.items.size() != 0}">Total: R$ #{cartController.totalPrice}</div>
 				<h:commandButton rendered="#{cartController.cart.items.size() != 0}" class="btn btn-primary" value="Finalizar Compra" actionListener="#{cartController.completeSell}">
-					<f:ajax render="carrinho messages" execute="@this"/>
+					<f:ajax render="@all" execute="@this"/>
 				</h:commandButton>
 			</h:form>
 			<h:outputLabel rendered="#{cartController.cart.items.size() == 0}" value="Ainda não há nada no seu carrinho!"/>
